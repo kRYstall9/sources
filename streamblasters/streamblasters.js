@@ -65,7 +65,7 @@ async function extractEpisodes(url) {
     return JSON.stringify(episodes);
 }
 
-async function extractStream(url) {
+async function extractStreamUrl(url) {
     const embedResponse = await fetch(url);
     const data = await embedResponse; 
 
