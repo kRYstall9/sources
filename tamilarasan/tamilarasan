@@ -1,0 +1,16 @@
+{
+    "sourceName": "Tamilarasan",
+    "iconUrl": "https://tamilarasan.com/wp-content/uploads/2022/10/cropped-Site-IconTAMILGOOD-22-192x192.jpg",
+    "author": {
+        "name": "50/50",
+        "icon": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ3122kQwublLkZ6rf1fEpUP79BxZOFmH9BSA&s"
+    },
+    "version": "1.0.1",
+    "language": "Tamil/Telugu/Hindi/Kannada/English (DUB/SUB)",
+    "streamType": "HLS",
+    "quality": "1080p",
+    "baseUrl": "https://tamilarasan.com/",
+    "searchBaseUrl": "https://tamilarasan.com/?s=%s",
+    "scriptUrl": "https://github.com/50n50/sources/raw/refs/heads/main/tamilarasan/tamilarasan.js",
+    "asyncJS": true
+}
