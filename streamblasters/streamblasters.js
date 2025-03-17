@@ -44,7 +44,7 @@ async function extractDetails(url) {
     });
 
     console.log(JSON.stringify(details));
-    return details;
+    return JSON.stringify(details);
 }
 
 async function extractEpisodes(url) {
