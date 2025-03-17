@@ -51,7 +51,7 @@ async function extractEpisodes(url) {
     const html = await response;
     const episodes = [];
 
-    const regex = /<iframe[^>]+src=["'](https?:\/\/lulu[^"']+)["']/g;
+    const regex = /<iframe[^>]+src=["'](https?:\/\/(?:ryderjet|ghbrisk|smoothpre|cybervynx)[^"']+)["']/g;
     let match;
     let index = 0;
 
@@ -65,6 +65,7 @@ async function extractEpisodes(url) {
     console.log(JSON.stringify(episodes));
     return JSON.stringify(episodes);
 }
+
 
 async function extractStreamUrl(url) {
     const embedResponse = await fetch(url);
