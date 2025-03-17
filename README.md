@@ -365,7 +365,7 @@
 
 <summary>
 
-### Hindi 🇮🇳
+### Hindi/Tamil + More 🇮🇳
 
 </summary>
 <details>
@@ -415,6 +415,22 @@
 **App version:** V2 and up <br>
 **Author:** 50/50 <br><br>
 [<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/streamblasters/streamblasters.json)
+</details>
+<details>
+
+<summary>
+  
+### 4️⃣ Tamilarasan (Movies) 
+
+</summary>
+<img src="https://cdn-icons-png.freepik.com/256/14272/14272467.png" width="125px"><br>
+
+**File:** `tamilarasan.json`  
+**Description:** Tamilarasan JavaScript that directly scrapes the site (requires `tamilarasan.js`). <br> 
+**Language:** Tamil/Telugu/Hindi/Kannada/English. (DUB/SUB) <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/tamilarasan/tamilarasan.json)
 </details>
 </details>
 
