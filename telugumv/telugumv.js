@@ -4,35 +4,37 @@
 
 async function searchResults(keyword) {
     const searchUrl = `https://telugumv.fun/?s=${encodeURIComponent(keyword)}`;
-    console.log(searchUrl);
+    try {
+        const response = await fetch(searchUrl);
+        const html = await response;
+        const results = [];
 
-    const response = await fetch(searchUrl);
-    const html = await response;
+        const filmListRegex = /<div class="result-item">[\s\S]*?<\/article><\/div>/g;
+        const items = html.match(filmListRegex) || [];
 
-    const results = [];
-    const filmListRegex = /<div class="result-item">[\s\S]*?<\/article><\/div>/g;
-    const items = html.match(filmListRegex) || [];
+        items.forEach((itemHtml) => {
+            const titleMatch = itemHtml.match(/<div class="title"><a href="([^"]+)">([^<]+)<\/a>/);
+            const href = titleMatch ? titleMatch[1] : '';
+            const dirtyTitle = titleMatch ? titleMatch[2] : '';
+            const title = cleanTitle(dirtyTitle);
+            const imgMatch = itemHtml.match(/<img[^>]*src="([^"]+)"[^>]*>/);
+            const imageUrl = imgMatch ? imgMatch[1] : '';
 
-    items.forEach((itemHtml) => {
-        const titleMatch = itemHtml.match(/<div class="title"><a href="([^"]+)">([^<]+)<\/a>/);
-        const href = titleMatch ? titleMatch[1] : '';
-        const title = titleMatch ? titleMatch[2] : '';
-        const imgMatch = itemHtml.match(/<img[^>]*src="([^"]+)"[^>]*>/);
-        const imageUrl = imgMatch ? imgMatch[1] : '';
-        //Excluding TV shows, see line 70
-        if (title && href && !href.includes('/tvshows/')) { 
-            results.push({
-                title: title.trim(),
-                image: imageUrl.trim(),
-                href: href.trim(),
-            });
-        }
-    });
+            if (title && href && !href.includes('/tvshows/')) {
+                results.push({
+                    title: title.trim(),
+                    image: imageUrl.trim(),
+                    href: href.trim(),
+                });
+            }
+        });
 
-    console.log(results);
-    return results;
+        console.log(JSON.stringify(results));
+        return JSON.stringify(results);
+    } catch (error) {
+        throw error;
+    }
 }
-
 
 async function extractDetails(url) {
     const response = await fetch(url);
@@ -49,7 +51,7 @@ async function extractDetails(url) {
     });
 
     console.log(details);
-    return details;
+    return JSON.stringify(details);
 }
 
 async function extractEpisodes(url) {
@@ -71,7 +73,6 @@ async function extractEpisodes(url) {
                     number: 1
                 });
             } else {
-                console.log("No JSON link found.");
             }
         } else {
             //This will never run do to me excluding TV shows from the search, their stream doesn't always work and neither does the download
@@ -97,10 +98,11 @@ async function extractEpisodes(url) {
         console.log("No canonical link found.");
     }
     console.log(episodes);
-    return episodes;
+    return JSON.stringify(episodes);
 }
 
-async function searchResults(url) {
+async function extractStreamUrl(url) {
+    console.log(url);
     const response = await fetch(url);
     const json = await JSON.parse(response);
 
@@ -122,6 +124,13 @@ async function searchResults(url) {
 ////////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////       Helper Functions       ////////////////////////////
 //////////////////////////////////////////////////////////////////////////////////////
+
+function cleanTitle(title) {
+    return title
+        .replace(/&#8217;/g, "'")  
+        .replace(/&#8211;/g, "-")  
+        .replace(/&#[0-9]+;/g, ""); 
+}
 
 /*
 Credit to GitHub user @mnsrulz for Unpacker Node library
