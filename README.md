@@ -384,6 +384,22 @@
 **Author:** 50/50 <br><br>
 [<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://github.com/50n50/sources/raw/refs/heads/main/onlinemovieshindi/onlinemovieshindi.json)
 </details>
+<details>
+
+<summary>
+  
+### 2️⃣ Telugumv (Movies) 
+
+</summary>
+<img src="https://cdn-icons-png.freepik.com/256/14272/14272467.png" width="125px"><br>
+
+**File:** `telugumv.json`  
+**Description:** Telugumv JavaScript that directly scrapes the site (requires `telugumv.js`). <br> 
+**Language:** Hindi. (SUB) <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/telugumv/telugumv.json)
+</details>
 </details>
 
 <!--- HINDI ======================================================================================================= END --->
