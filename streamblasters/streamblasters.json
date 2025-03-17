@@ -11,6 +11,6 @@
     "quality": "1080p",
     "baseUrl": "https://streamblasters.pm/t",
     "searchBaseUrl": "https://streamblasters.pm/?s=%s",
-    "scriptUrl": "https://raw.githubusercontent.com/50n50/sources/refs/heads/main/telugumv/telugumv.json",
+    "scriptUrl": "https://github.com/50n50/sources/raw/refs/heads/main/streamblasters/streamblasters.js",
     "asyncJS": true
 }
