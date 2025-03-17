@@ -400,6 +400,22 @@
 **Author:** 50/50 <br><br>
 [<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/telugumv/telugumv.json)
 </details>
+<details>
+
+<summary>
+  
+### 3️⃣ Streamblasters (Movies) 
+
+</summary>
+<img src="https://cdn-icons-png.freepik.com/256/14272/14272467.png" width="125px"><br>
+
+**File:** `Streamblasters.json`  
+**Description:** Streamblasters JavaScript that directly scrapes the site (requires `Streamblasters.js`). <br> 
+**Language:** Tamil/Malayalam/Telugu/Hindi/Kannada/English. (DUB/SUB) <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/streamblasters/streamblasters.json)
+</details>
 </details>
 
 <!--- HINDI ======================================================================================================= END --->
