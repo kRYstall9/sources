@@ -2,8 +2,11 @@
 /////////////////////////////       Main Functions          //////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////////
 
-async function searchResults(url) {
-    const response = await fetch(url);
+async function searchResults(keyword) {
+    const searchUrl = `https://telugumv.fun/?s=${encodeURIComponent(keyword)}`;
+    console.log(searchUrl);
+
+    const response = await fetch(searchUrl);
     const html = await response;
 
     const results = [];
@@ -222,5 +225,3 @@ function unpack(source) {
     }
 }
 
-
-searchResults("https://telugumv.fun/wp-json/dooplayer/v2/5143/movie/1");
