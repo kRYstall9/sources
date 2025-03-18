@@ -10,8 +10,8 @@
     "streamType": "HLS",
     "quality": "720p",
     "baseUrl": "https://megacloud.club/",
-    "searchBaseUrl": "https://api.hianimex.to/api/v2/hianime/search?q=%s",
-    "scriptUrl": "https://bshar1865-hianime.vercel.app/api/v2/hianime/search?q=%s",
+    "searchBaseUrl": "https://bshar1865-hianime.vercel.app/api/v2/hianime/search?q=%s",
+    "scriptUrl": "https://raw.githubusercontent.com/50n50/sources/refs/heads/main/hianime/hianimetempp.js",
     "asyncJS": true,
     "softsub": true
 }
