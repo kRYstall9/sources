@@ -80,7 +80,7 @@ async function extractStreamUrl(url) {
         const dataTwo = JSON.parse(responseTwo);
         
         const hlsSource = data.data.sources.find(source => source.type === 'hls');
-        const subtitleTrack = dataTwo.data.tracks?.find(track => track.kind === 'captions');
+        const subtitleTrack = dataTwo.data.tracks?.find(track => track.label === 'English');
         
         const result = {
             stream: hlsSource ? hlsSource.url : null,
