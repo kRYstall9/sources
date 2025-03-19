@@ -45,7 +45,6 @@ function extractDetails(html) {
   return details;
 }
 
-
 function extractEpisodes(html) {
   const episodes = [];
   
@@ -58,14 +57,14 @@ function extractEpisodes(html) {
 
           if (hrefMatch && numberMatch) {
               episodes.push({
-                  href: "episode: " + hrefMatch[1],
+                  href: hrefMatch[1],
                   number: numberMatch[1]
               });
           }
       });
   }
 
-  console.log(episodes);
+  console.log(JSON.stringify(episodes));
   return episodes;
 }
 
@@ -93,4 +92,5 @@ async function extractStreamUrl(html) {
       return null;
   }
 }
+
 
