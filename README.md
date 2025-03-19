@@ -464,6 +464,35 @@
 </details>
 
 <!--- TURKISH ======================================================================================================= END --->
+##
+<!--- PORTUGUESE ======================================================================================================= START --->
+
+<details>
+
+<summary>
+
+### Portuguese 🇵🇹
+
+</summary>
+<details>
+
+<summary>
+  
+### 1️⃣ AnimeFHD 
+
+</summary>
+<img src="https://animefhd.net/wp-content/uploads/2024/12/270.png" width="125px"><br>
+
+**File:** `AnimeFHD.json`  
+**Description:** AnimeFHD JavaScript module that directly scrapes the website (requires `AnimeFHD.js`). <br> 
+**Language:** Portuguese. (SUB) <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://github.com/50n50/sources/raw/refs/heads/main/animefhd/animefhd.json)
+</details>
+</details>
+
+<!--- PORTUGUESE ======================================================================================================= END --->
 
 ## Other authors <sub><sup>(Not made by me I only manage them.)</sup></sub>
 <!--- ENGLISH ======================================================================================================= START --->
