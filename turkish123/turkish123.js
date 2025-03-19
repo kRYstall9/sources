@@ -77,7 +77,7 @@ async function extractEpisodes(url) {
             if (hrefMatch && episodeNumberMatch) {
                 episodes.push({
                     href: hrefMatch[1].trim(),
-                    number: episodeNumberMatch[1]
+                    number: parseInt(episodeNumberMatch[1], 10) 
                 });
             }
         });
