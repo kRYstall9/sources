@@ -80,7 +80,7 @@ async function extractStreamUrl(id) {
         const voeStream = data.data.anime_episode_links.find(link => link.name === 'VOE' && link.lang === 'ger-sub');
 
         if (voeStream) {
-            const newLink = voeStream.link.replace('https://voe.sx/e/', 'https://maxfinishseveral.com/e/');
+            const newLink = voeStream.link.replace('https://voe.sx/e/', 'https://alejandrocenturyoil.com/e/');
             const tempHTML = await fetch(newLink);
 
             const htmlContent = await tempHTML;
