@@ -435,6 +435,35 @@
 </details>
 
 <!--- HINDI ======================================================================================================= END --->
+##
+<!--- TURKISH ======================================================================================================= START --->
+
+<details>
+
+<summary>
+
+### Turkish 🇹🇷
+
+</summary>
+<details>
+
+<summary>
+  
+### 1️⃣ Turkish123 
+
+</summary>
+<img src="https://hds.turkish123.com/wp-content/uploads/favicon.png" width="125px"><br>
+
+**File:** `AnimeSRBIJA.json`  
+**Description:** AnimeSRBIJA JavaScript module that directly scrapes the website (requires `AnimeSRBIJA.js`). <br> 
+**Language:** Serbian. (SUB) <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/turkish123/turkish123.json)
+</details>
+</details>
+
+<!--- TURKISH ======================================================================================================= END --->
 
 ## Other authors <sub><sup>(Not made by me I only manage them.)</sup></sub>
 <!--- ENGLISH ======================================================================================================= START --->
