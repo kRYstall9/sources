@@ -454,9 +454,9 @@
 </summary>
 <img src="https://hds.turkish123.com/wp-content/uploads/favicon.png" width="125px"><br>
 
-**File:** `AnimeSRBIJA.json`  
-**Description:** AnimeSRBIJA JavaScript module that directly scrapes the website (requires `AnimeSRBIJA.js`). <br> 
-**Language:** Serbian. (SUB) <br>
+**File:** `Turkish123.json`  
+**Description:** Turkish123 JavaScript module that directly scrapes the website (requires `Turkish123.js`). <br> 
+**Language:** Turkish. <br>
 **App version:** V2 and up <br>
 **Author:** 50/50 <br><br>
 [<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/turkish123/turkish123.json)
