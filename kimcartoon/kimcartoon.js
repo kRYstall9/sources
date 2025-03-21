@@ -44,27 +44,28 @@ async function extractDetails(url) {
     console.log(JSON.stringify(details));
     return JSON.stringify(details);
 }
-
 async function extractEpisodes(url) {
     const response = await fetch(url);
-    const html = await response.text();
+    const html = await response;
     const episodes = [];
     
-    const episodeMatches = [...html.matchAll(/<li[^>]*>\s*<a href="([^"]+)">\s*<div class="epl-title">Episode (\d+) <\/div>/g)];
+    const allMatches = [...html.matchAll(/<li[^>]*>\s*<a href="([^"]+)">\s*<div class="epl-title">([^<]*) <\/div>/g)];
     
-    const movieMatches = [...html.matchAll(/<li[^>]*>\s*<a href="([^"]+)">\s*<div class="epl-title">(Movie|Full movie|Moive|Full moive) <\/div>/g)];    
-    //They have typo's and I'm lazy
-    for (const match of episodeMatches) {
-        episodes.push({
-            href: match[1].trim(),
-            number: parseInt(match[2], 10)
-        });
-    }
-    
-    if (movieMatches.length > 0) {
-        for (const movieMatch of movieMatches) {
+    for (const match of allMatches) {
+        const href = match[1].trim();
+        const title = match[2].trim();
+        
+        if (title.startsWith("Episode")) {
+            const numberMatch = title.match(/Episode (\d+)/);
+            if (numberMatch && numberMatch[1]) {
+                episodes.push({
+                    href: href,
+                    number: parseInt(numberMatch[1], 10)
+                });
+            }
+        } else {
             episodes.push({
-                href: movieMatch[1].trim(),
+                href: href,
                 number: 1
             });
         }
