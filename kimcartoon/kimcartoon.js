@@ -49,24 +49,28 @@ async function extractEpisodes(url) {
     const response = await fetch(url);
     const html = await response;
     const episodes = [];
-
+    
     const episodeMatches = [...html.matchAll(/<li[^>]*>\s*<a href="([^"]+)">\s*<div class="epl-title">Episode (\d+) <\/div>/g)];
-    const movieMatch = html.match(/<li[^>]*>\s*<a href="([^"]+)">\s*<div class="epl-title">Movie <\/div>/);
-
+    
+    const movieMatches = [...html.matchAll(/<li[^>]*>\s*<a href="([^"]+)">\s*<div class="epl-title">(Movie|Full movie) <\/div>/g)];
+    
     for (const match of episodeMatches) {
         episodes.push({
             href: match[1].trim(),
             number: parseInt(match[2], 10)
         });
     }
-    if (movieMatch) {
-        episodes.push({
-            href: movieMatch[1].trim(),
-            number: 1
-        });
+    
+    if (movieMatches.length > 0) {
+        for (const movieMatch of movieMatches) {
+            episodes.push({
+                href: movieMatch[1].trim(),
+                number: 1
+            });
+        }
     }
-
-    //console.log(episodes);
+    
+    episodes.reverse();
     console.log(JSON.stringify(episodes));
     return JSON.stringify(episodes);
 }
@@ -74,20 +78,26 @@ async function extractEpisodes(url) {
 async function extractStreamUrl(url) {
     const embedResponse = await fetch(url);
     const data = await embedResponse;
-
-    const embedMatch = data.match(/<div class="pembed" data-embed="(\/\/.*?)"/);
-
+    
+    const embedMatch = data.match(/<div class="pembed" data-embed="(.*?)"/);
     if (embedMatch && embedMatch[1]) {
-        const embedUrl = embedMatch[1];
-        const fullEmbedUrl = 'https:' + embedUrl.trim();
+        let embedUrl = embedMatch[1].trim();
+        
+        let fullEmbedUrl;
+        if (embedUrl.startsWith('//')) {
+            fullEmbedUrl = 'https:' + embedUrl;
+        } else if (embedUrl.startsWith('http://') || embedUrl.startsWith('https://')) {
+            fullEmbedUrl = embedUrl; 
+        } else {
+            fullEmbedUrl = 'https://' + embedUrl; 
+        }
+        
         console.log(fullEmbedUrl);
-
         const embedPageResponse = await fetch(fullEmbedUrl);
         const embedPageData = await embedPageResponse;
+        
         console.log(embedPageData);
-
         const m3u8Match = embedPageData.match(/sources:\s*\[\{file:"(https:\/\/[^"]*\.m3u8)"/);
-
         if (m3u8Match && m3u8Match[1]) {
             const m3u8Url = m3u8Match[1];
             console.log(m3u8Url);
