@@ -79,9 +79,12 @@ async function extractStreamUrl(url) {
 
     if (embedMatch && embedMatch[1]) {
         const embedUrl = embedMatch[1];
+        const fullEmbedUrl = 'https:' + embedUrl.trim();
+        console.log(fullEmbedUrl);
 
-        const embedPageResponse = await fetch('https:' + embedUrl);
-        const embedPageData = await embedPageResponse.text();
+        const embedPageResponse = await fetch(fullEmbedUrl);
+        const embedPageData = await embedPageResponse;
+        console.log(embedPageData);
 
         const m3u8Match = embedPageData.match(/sources:\s*\[\{file:"(https:\/\/[^"]*\.m3u8)"/);
 
@@ -90,11 +93,9 @@ async function extractStreamUrl(url) {
             console.log(m3u8Url);
             return m3u8Url;
         } else {
-            console.error("M3U8 URL not found.");
-            return null;
+            throw new Error("M3U8 URL not found.");
         }
     } else {
-        console.error("Embed URL not found.");
-        return null;
+        throw new Error("Embed URL not found.");
     }
 }
