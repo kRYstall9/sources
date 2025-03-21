@@ -4,23 +4,26 @@ async function searchResults(keyword) {
         const response = await fetch(searchUrl);
         const html = await response;
         const results = [];
-
         const articleRegex = /<article[^>]*class="bs styletwo"[\s\S]*?<\/article>/g;
         const items = html.match(articleRegex) || [];
-
+        
+        function cleanTitle(title) {
+            return title
+                .replace(/&#8217;/g, "'")
+                .replace(/&#8211;/g, "-")
+                .replace(/&#[0-9]+;/g, "");
+        }
+        
         items.forEach((itemHtml) => {
             const titleMatch = itemHtml.match(/<a[^>]*href="([^"]+)"[^>]*title="([^"]+)"/);
             const imgMatch = itemHtml.match(/<img[^>]*src="([^"]+)"/);
-
             if (!titleMatch || !imgMatch) return;
-
             const href = `${titleMatch[1].trim()}?video_index=2`;
-            const title = titleMatch[2].trim();
+            const title = cleanTitle(titleMatch[2].trim());
             const imageUrl = imgMatch[1].trim();
-
             results.push({ title, image: imageUrl, href });
         });
-        //console.log(results);
+        
         console.log(JSON.stringify(results));
         return JSON.stringify(results);
     } catch (error) {
