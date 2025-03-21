@@ -47,12 +47,12 @@ async function extractDetails(url) {
 
 async function extractEpisodes(url) {
     const response = await fetch(url);
-    const html = await response;
+    const html = await response.text();
     const episodes = [];
     
     const episodeMatches = [...html.matchAll(/<li[^>]*>\s*<a href="([^"]+)">\s*<div class="epl-title">Episode (\d+) <\/div>/g)];
     
-    const movieMatches = [...html.matchAll(/<li[^>]*>\s*<a href="([^"]+)">\s*<div class="epl-title">(Movie|Full movie) <\/div>/g)];
+    const movieMatches = [...html.matchAll(/<li[^>]*>\s*<a href="([^"]+)">\s*<div class="epl-title">(?!Episode)([^<]*) <\/div>/g)];
     
     for (const match of episodeMatches) {
         episodes.push({
