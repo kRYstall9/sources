@@ -120,6 +120,22 @@
 [<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://github.com/50n50/sources/raw/refs/heads/main/fireanime/fireanime.json)
 </details>
 
+<details>
+
+<summary>
+  
+### 7️⃣ KimCartoon 
+
+</summary>
+
+**File:** `KimCartoon.json`  
+**Description:** KimCartoon JavaScript module that directly scrapes the site (requires `KimCartoon.js`). <br> 
+**Language:** English. (SUB) <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/kimcartoon/kimcartoon.json)
+</details>
+
 
 </details>
 <!--- ENGLISH ======================================================================================================= END --->
