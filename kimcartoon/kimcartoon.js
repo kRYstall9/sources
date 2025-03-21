@@ -52,7 +52,7 @@ async function extractEpisodes(url) {
     
     const episodeMatches = [...html.matchAll(/<li[^>]*>\s*<a href="([^"]+)">\s*<div class="epl-title">Episode (\d+) <\/div>/g)];
     
-    const movieMatches = [...html.matchAll(/<li[^>]*>\s*<a href="([^"]+)">\s*<div class="epl-title">(?!Episode)([^<]*) <\/div>/g)];
+    const movieMatches = [...html.matchAll(/<li[^>]*>\s*<a href="([^"]+)">\s*<div class="epl-title">(Movie|Full movie|Moive|Full moive) <\/div>/g)];    
     
     for (const match of episodeMatches) {
         episodes.push({
