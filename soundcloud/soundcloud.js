@@ -49,10 +49,21 @@ async function extractEpisodes(url) {
             href: 'https://soundcloud.com' + match[1].trim()
         });
     }
-    //console.log(tracks)
+
+    if (tracks.length === 0) {
+        const canonicalMatch = html.match(/<link rel="canonical" href="([^"]+)">/);
+        if (canonicalMatch) {
+            tracks.push({
+                number: 1,
+                href: canonicalMatch[1].trim()
+            });
+        }
+    }
+
     console.log(JSON.stringify(tracks));
     return JSON.stringify(tracks);
 }
+
 
 async function extractStreamUrl(url) {
     const clientId = "UjhhbCuNo1OQfTwkzajxQNLlJcSlUlVz";
