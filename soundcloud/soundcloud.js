@@ -21,6 +21,7 @@ async function searchResults(keyword) {
 }
 
 async function extractDetails(url) {
+    const details = [];
     details.push({
         description: 'N/A',
         alias: 'N/A',
@@ -50,41 +51,42 @@ async function extractEpisodes(url) {
         });
     }
 
-    if (tracks.length === 0) {
-        const canonicalMatch = html.match(/<link rel="canonical" href="([^"]+)">/);
+    if (tracks.length > 0) {
+        return JSON.stringify(tracks);
+    } else {
+        const canonicalMatch = html.match(/\["link",\{"rel":"canonical","href":"([^"]+)"\}\]/);
         if (canonicalMatch) {
-            tracks.push({
-                number: 1,
-                href: canonicalMatch[1].trim()
-            });
+            return JSON.stringify([{ number: 1, href: canonicalMatch[1].trim() }]);
         }
     }
 
-    console.log(JSON.stringify(tracks));
-    return JSON.stringify(tracks);
+    return JSON.stringify([]); 
 }
 
 
 async function extractStreamUrl(url) {
     const clientId = "UjhhbCuNo1OQfTwkzajxQNLlJcSlUlVz";
-
     try {
-        const response = await fetch(url);
-        const html = await response;
+      const response = await fetch(url);
+      const html = await response;
+      
+      const urlMatch = html.match(/"url":"(https:\/\/api[^\.]*\.soundcloud\.com\/media\/soundcloud:tracks:[^"]+)"/);
+      const authMatch = html.match(/"track_authorization":"([^"]+)"/);
+      
+      if (urlMatch && authMatch) {
+        const streamUrl = `${urlMatch[1]}?client_id=${clientId}&track_authorization=${authMatch[1]}`;
+        
+        const responseTwo = await fetch(streamUrl);
+        const json = await JSON.parse(responseTwo);
 
-        const urlMatch = html.match(/"url":"(https:\/\/api-v2\.soundcloud\.com\/media\/soundcloud:tracks:[^"]+)"/);
-        const authMatch = html.match(/"track_authorization":"([^"]+)"/);
-
-        if (urlMatch && authMatch) {
-            const streamUrl = `${urlMatch[1]}?client_id=${clientId}&track_authorization=${authMatch[1]}`;
-            const responseTwo = await fetch(streamUrl);
-            const json = await JSON.parse(responseTwo);
-            console.log(json.url);
-            return json.url;
-        } else {
-            return null;
-        }
-    } catch (error) {
+        return json.url;
+      } else {
+        console.log("No stream URL found");
+        
         return null;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      return null;
     }
-}
+  }
