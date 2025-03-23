@@ -64,7 +64,7 @@ async function extractEpisodes(showId) {
 
         console.log(JSON.stringify(episodes));
         //console.log(episodes);
-        return episodes;
+        return JSON.stringify(episodes);
     } catch (error) {
         return null;
     }
@@ -80,6 +80,7 @@ async function extractStreamUrl(url) {
         headers: headers,
         credentials: 'include'
     });
+    
     const data = JSON.parse(responseText);
     //const data = await responseText.json();
     const embedUrl = data.link3;
