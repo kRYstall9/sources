@@ -63,19 +63,29 @@ async function extractEpisodes(url) {
     const response = await fetchv2(url);
     const html = await response.text();
     const episodes = [];
-
     const episodeMatches = [...html.matchAll(/<div class="Episode"[^>]*>.*?<a href="([^"]+)">.*?ตอนที่\s*(\d+)/g)];
-
-    episodeMatches.forEach(match => {
+    
+    if (episodeMatches.length > 0) {
+      episodeMatches.forEach(match => {
         episodes.push({
-            href: match[1].trim(),
-            number: parseInt(match[2], 10)
+          href: match[1].trim(),
+          number: parseInt(match[2], 10)
         });
-    });
-
+      });
+    } else {
+      const movieMatch = html.match(/<div class="Episode">.*?<a href="([^"]+)"[^>]*>.*?<\/a>/);
+      if (movieMatch) {
+        episodes.push({
+          href: movieMatch[1].trim(),
+          number: 1 
+        });
+      }
+    }
+    
     console.log(JSON.stringify(episodes));
     return JSON.stringify(episodes);
-}
+   }
+
 
 async function extractStreamUrl(url) {
     const embedResponse = await fetchv2(url);
@@ -94,7 +104,7 @@ async function extractStreamUrl(url) {
         var videoId = idMatch[1];
     }
 
-    const streamUrl = `https://sub-thai.com/stream/player/${videoId}.php`;
+    const streamUrl = `https://sub-thai.com/stream2/player2/${videoId}.php`;
     const streamResponse = await fetchv2(streamUrl);
     const streamHtml = await streamResponse.text();
 
@@ -103,7 +113,7 @@ async function extractStreamUrl(url) {
         throw new Error("Stream file not found");
     }
 
-    const finalUrl = `https://sub-thai.com${fileMatch[1].replace(/^\.\./, '')}`;
+    const finalUrl = `https://sub-thai.com/${fileMatch[1].replace(/^(\.\.\/)+/, '')}`;
     console.log(finalUrl);
     return finalUrl;
 }
