@@ -1,10 +1,10 @@
 async function searchResults(keyword) {
     try {
         const encodedKeyword = encodeURIComponent(keyword);
-        const responseText = await fetch(`https://frembed.xyz/api/public/search?query=${encodedKeyword}`);
-        const data = JSON.parse(responseText);
-        //const data = await responseText.json();
-
+        const responseText = await fetchv2(`https://frembed.xyz/api/public/search?query=${encodedKeyword}`);
+        //const data = JSON.parse(responseText);
+        const data = await responseText.json();
+        
         const showsData = data.tvShows.map(show => {
             return {
                 title: show.name || show.original_title,
@@ -18,7 +18,7 @@ async function searchResults(keyword) {
 
         return JSON.stringify(showsData);
     } catch (error) {
-        console.log('Fetch error in searchResults:', error);
+        console.log('Fetch error in searchResults:', error.message);
         return JSON.stringify([{
             title: 'Error',
             image: '',
@@ -29,9 +29,9 @@ async function searchResults(keyword) {
 
 async function extractDetails(showId) {
     try {
-        const responseText = await fetch(`https://frembed.xyz/api/public/tv-show/${showId}`);
-        const data = JSON.parse(responseText);
-        //const data = await responseText.json();
+        const responseText = await fetchv2(`https://frembed.xyz/api/public/tv-show/${showId}`);
+        //const data = JSON.parse(responseText);
+        const data = await responseText.json();
 
         const transformedResults = [{
             description: data.overview || 'N/A',
@@ -50,9 +50,9 @@ async function extractDetails(showId) {
 
 async function extractEpisodes(showId) {
     try {
-        const responseText = await fetch(`https://frembed.xyz/api/public/tv-show/${showId}/listep`);
-        const data = JSON.parse(responseText);
-        //const data = await responseText.json();
+        const responseText = await fetchv2(`https://frembed.xyz/api/public/tv-show/${showId}/listep`);
+        //const data = JSON.parse(responseText);
+        const data = await responseText.json();
 
 
         const episodes = data.map(season =>
@@ -71,36 +71,37 @@ async function extractEpisodes(showId) {
 }
 
 async function extractStreamUrl(url) {
-    const headers = new Headers({
-        'Referer': 'https://frembed.xyz/',
-    });
+    try {
+        const headers = {
+            'Referer': 'https://frembed.xyz',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+            'Accept': 'application/json'
+        };
 
-    const responseText = await fetch(`https://frembed.xyz/api/series?${url}&idType=tmdb`, {
-        method: 'GET',
-        headers: headers,
-        credentials: 'include'
-    });
-    
-    const data = JSON.parse(responseText);
-    //const data = await responseText.json();
-    const embedUrl = data.link3;
-    const newEmbedUrl = embedUrl.replace("https://maxfinishseveral.com/e/", "https://heatherwholeinvolve.com/e/");
-    const response = await fetch(newEmbedUrl);
-    //const html = await response.text();
-    const html = response;
+        const responseText = await fetchv2(`https://frembed.xyz/api/series?${url}&idType=tmdb`, headers);
 
-    const scriptMatch = html.match(/var\s+sources\s*=\s*({.*?});/s);
-    if (scriptMatch) {
-        let rawSourcesData = scriptMatch[1];
-        const hlsMatch = rawSourcesData.match(/['"]hls['"]\s*:\s*['"]([^'"]+)['"]/);
-        if (hlsMatch) {
-            const hlsEncodedUrl = hlsMatch[1];
+        const data = await responseText.json();
+        const embedUrl = data.link3;
+        const newEmbedUrl = embedUrl.replace("https://maxfinishseveral.com/e/", "https://heatherwholeinvolve.com/e/");
+        console.log(newEmbedUrl);
+        const response = await fetchv2(newEmbedUrl);
+        const html = await response.text();
+        const scriptMatch = html.match(/var\s+sources\s*=\s*({.*?});/s);
+        if (scriptMatch) {
+            let rawSourcesData = scriptMatch[1];
+            const hlsMatch = rawSourcesData.match(/['"]hls['"]\s*:\s*['"]([^'"]+)['"]/);
+            if (hlsMatch) {
+                const hlsEncodedUrl = hlsMatch[1];
 
-            const decodedUrl = base64Decode(hlsEncodedUrl);
-            console.log(decodedUrl);
-            return decodedUrl;
+                const decodedUrl = base64Decode(hlsEncodedUrl);
+                console.log(decodedUrl);
+                return decodedUrl;
+            }
+            return data;
         }
-        return data;
+    } catch (error) {
+        console.log('Fetch error in extractStreamUrl:' + error);
+        return null;
     }
 }
 
