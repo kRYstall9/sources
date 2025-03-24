@@ -509,6 +509,36 @@
 </details>
 
 <!--- PORTUGUESE ======================================================================================================= END --->
+##
+<!--- FRENCH ======================================================================================================= START --->
+
+<details>
+
+<summary>
+
+### French 🇫🇷
+
+</summary>
+<details>
+
+<summary>
+  
+### 1️⃣ Frembed (TV Show) (⚠️ Read note)
+
+</summary>
+<img src="[https://animefhd.net/wp-content/uploads/2024/12/270.png](https://raw.githubusercontent.com/xibrox/sora-movie-module/refs/heads/main/frembed/icon.png)" width="125px"><br>
+
+**File:** `Frembed.json`  
+**Description:** Frembed JavaScript module that directly scrapes the website (requires `Frembed.js`). <br> 
+**Note:** *⚠️ Some shows won't work, we are unable to fix that.* <br>
+**Language:** French. (SUB/DUB) <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/frembed/frembed.json)
+</details>
+</details>
+
+<!--- FRENCH ======================================================================================================= END --->
 
 ## Other authors <sub><sup>(Not made by me I only manage them.)</sup></sub>
 <!--- ENGLISH ======================================================================================================= START --->
