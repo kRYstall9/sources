@@ -1,4 +1,6 @@
-function searchResults(html) {
+async function searchResults(keyword) {
+	const response = await fetchv2(`https://v6.kuramanime.run/anime?search=${keyword}`);
+	const html = await response.text();
 	const results = [];
 
 	const animeEntryRegex = /<div class="product__item">[\s\S]*?<a href="([^"]+)"[\s\S]*?data-setbg="([^"]+)"[\s\S]*?<h5><a[^>]*>([^<]+)<\/a><\/h5>/g;
@@ -22,7 +24,9 @@ function searchResults(html) {
 	return results;
 }
 
-function extractDetails(html) {
+async function extractDetails(url) {
+	const response = await fetchv2(url);
+	const html = await response.text();
 	const details = [];
 	const descriptionMatch = html.match(/<p id="synopsisField"[^>]*>([\s\S]*?)<\/p>/);
 
@@ -43,7 +47,9 @@ function extractDetails(html) {
 	return details;
 }
 
-function extractEpisodes(html) {
+async function extractEpisodes(url) {
+    const response = await fetchv2(url);
+    const html = await response.text();
     const episodes = [];    
     const episodeLinks = [...html.matchAll(/<a\s+class=['"]btn btn-sm btn-secondary mb-1 mt-1['"]\s*href=['"]([^'"]+)['"][^>]*>\s*Ep\s*(\d+)/g)];
     
@@ -73,7 +79,9 @@ function extractEpisodes(html) {
     return episodes;
 }
 
-function extractStreamUrl(html) {
+async function extractStreamUrl(html) {
+    const response = await fetchv2(url);
+    const html = await response.text();
     const videoRegex = /<video[^>]*src=["']([^"']+)["'][^>]*>/i;
     
     const match = html.match(videoRegex);
