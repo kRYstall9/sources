@@ -62,7 +62,7 @@ async function extractEpisodes(url) {
         jsonData.tracks.forEach(track => {
             if (track.src0) {
                 const episodeMatch = track.src0.match(/S01E(\d+)/) || track.caption.match(/\u7b2c(\d+)\u96c6/);
-                const episodeNumber = episodeMatch ? episodeMatch[1] : null;
+                const episodeNumber = episodeMatch ? parseInt(episodeMatch[1], 10) : null; // Convert to integer
 
                 episodes.push({
                     href: `https://v.ddys.pro${track.src0.trim()}`,
@@ -71,9 +71,11 @@ async function extractEpisodes(url) {
             }
         });
     }
+
     console.log(episodes);
     return JSON.stringify(episodes);
 }
+
 
 async function extractStreamUrl(url) {
     return url;
