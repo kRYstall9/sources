@@ -569,6 +569,35 @@
 </details>
 
 <!--- THAI ======================================================================================================= END --->
+##
+<!--- CHINESE ======================================================================================================= START --->
+
+<details>
+
+<summary>
+
+### Chinese 🇨🇳
+
+</summary>
+<details>
+
+<summary>
+  
+### 1️⃣ DDYS (TV Show/Movie)
+
+</summary>
+<img src="https://ddys.pro/apple-touch-icon.png" width="125px"><br>
+
+**File:** `DDYS.json`  
+**Description:** DDYS JavaScript module that directly scrapes the website (requires `DDYS.js`). <br> 
+**Language:** Chinese. <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/ddys/ddys.json)
+</details>
+</details>
+
+<!--- CHINESE ======================================================================================================= END --->
 
 ## Other authors <sub><sup>(Not made by me I only manage them.)</sup></sub>
 <!--- ENGLISH ======================================================================================================= START --->
