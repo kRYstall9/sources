@@ -1,24 +1,26 @@
 async function searchResults(keyword) {
     const response = await fetchv2(`https://v6.kuramanime.run/anime?search=${keyword}&order_by=oldest`);
     const html = await response.text();
+    console.log(html);
     const results = [];
-
-    const animeEntryRegex = /<a href="([^"]+)"[\s\S]*?<div class="product__sidebar__view__item set-bg" data-setbg="([^"]+)"[\s\S]*?<h5 class="sidebar-title-h5[^>]*>([^<]+)<\/h5>/g;
+    
+    const animeEntryRegex = /<div class="product__item">[\s\S]*?<a href="([^"]+)"[\s\S]*?data-setbg="([^"]+)"[\s\S]*?<h5><a[^>]*>([^<]+)<\/a><\/h5>/g;
+    
     const entries = html.matchAll(animeEntryRegex);
     for (const entry of entries) {
-        const href = entry[1].trim();
-        const imageUrl = entry[2].trim();
-        const title = entry[3].trim();
-
-        if (href && imageUrl && title) {
-            results.push({
-                title: title,
-                href: href,
-                image: imageUrl
-            });
-        }
+      const href = entry[1].trim();
+      const imageUrl = entry[2].trim();
+      const title = entry[3].trim();
+      
+      if (href && imageUrl && title) {
+        results.push({
+          title: title,
+          href: href,
+          image: imageUrl
+        });
+      }
     }
-
+    
     console.log(JSON.stringify(results));
     return JSON.stringify(results);
 }
@@ -99,10 +101,9 @@ async function extractStreamUrl(url) {
 
     const headers = {
         "Content-Type": "multipart/form-data",
-        "Authorization": "Bearer qRmmW9IENUUKLXneWDhiWIFyvnS6ttlM",
+        "Authorization": "Bearer hve1LcFiu8fdCzTkJ2vx2xfyJCTJYD7X",
         "Origin": "https://kuramadrive.com",
         "Alt-Used": "kuramadrive.com",
-        "Cookie": "XSRF-TOKEN=...; kuramadrive_by_kuramanime_session=...",
         "Content-Type": "application/json"
     };
 
