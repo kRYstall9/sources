@@ -536,6 +536,23 @@
 **Author:** 50/50 <br><br>
 [<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/frembed/frembed.json)
 </details>
+</summary>
+<details>
+
+<summary>
+  
+### 2️⃣ France-Anime 
+
+</summary>
+<img src="https://french-anime.com/templates/franime/images/favicon3.png" width="125px"><br>
+
+**File:** `France-Anime.json`  
+**Description:** France-Anime JavaScript module that directly scrapes the website (requires `France-Anime.js`). <br> 
+**Language:** French. (SUB) <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/french-anime/french-anime.json)
+</details>
 </details>
 
 <!--- FRENCH ======================================================================================================= END --->
