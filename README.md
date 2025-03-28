@@ -598,6 +598,35 @@
 </details>
 
 <!--- CHINESE ======================================================================================================= END --->
+##
+<!--- INDONESIAN ======================================================================================================= START --->
+
+<details>
+
+<summary>
+
+### Indonesian 🇮🇩
+
+</summary>
+<details>
+
+<summary>
+  
+### 1️⃣ KuramAnime (Anime)
+
+</summary>
+<img src="https://v6.kuramanime.run/assets/img/logo-full-256.png" width="125px"><br>
+
+**File:** `KuramAnime.json`  
+**Description:** KuramAnime JavaScript module that directly scrapes the website (KuramAnime `DDYS.js`). <br> 
+**Language:** Indonesian. <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/kuramanime/kuramanime.json)
+</details>
+</details>
+
+<!--- INDONESIAN ======================================================================================================= END --->
 
 ## Other authors <sub><sup>(Not made by me I only manage them.)</sup></sub>
 <!--- ENGLISH ======================================================================================================= START --->
