@@ -141,7 +141,7 @@ async function extractStreamUrl(url) {
     };
 
     try {
-        const responseText = await fetchv2(kdriveApiUrl, headers, "POST", JSON.stringify(postData));
+        const responseText = await fetchv2(kdriveApiUrl, headers, "POST", postData);
         const responseData = await responseText.text();
         console.error(responseData);
         let finalUrl = null;
