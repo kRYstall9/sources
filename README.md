@@ -635,7 +635,7 @@
 <img src="https://v6.kuramanime.run/assets/img/logo-full-256.png" width="125px"><br>
 
 **File:** `KuramAnime.json`  
-**Description:** KuramAnime JavaScript module that directly scrapes the website (KuramAnime `DDYS.js`). <br> 
+**Description:** KuramAnime JavaScript module that directly scrapes the website (requires `KuramAnime.js`). <br> 
 **Language:** Indonesian. <br>
 **App version:** V2 and up <br>
 **Author:** 50/50 <br><br>
@@ -644,6 +644,35 @@
 </details>
 
 <!--- INDONESIAN ======================================================================================================= END --->
+##
+<!--- ITALIAN ======================================================================================================= START --->
+
+<details>
+
+<summary>
+
+### Italian 🇮🇹
+
+</summary>
+<details>
+
+<summary>
+  
+### 1️⃣ AnimeSaturn (Anime)
+
+</summary>
+<img src="https://www.animesaturn.cx/immagini/apple-touch-icon.png" width="125px"><br>
+
+**File:** `AnimeSaturn.json`  
+**Description:** AnimeSaturn JavaScript module that directly scrapes the website (requires `AnimeSaturn.js`). <br> 
+**Language:** Italian. <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/animesaturn/animesaturn.json)
+</details>
+</details>
+
+<!--- ITALIAN ======================================================================================================= END --->
 
 ## Other authors <sub><sup>(Not made by me I only manage them.)</sup></sub>
 <!--- ENGLISH ======================================================================================================= START --->
