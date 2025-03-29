@@ -1,35 +1,19 @@
 async function searchResults(keyword) {
     const results = [];
-    const response = await fetchv2(`https://www.animesaturn.cx/animelist?search=${keyword}`);
+    const response = await fetchv2(https://www.animesaturn.cx/animelist?search=${keyword});
     const html = await response.text();
-    
-    const itemRegex = /<li class="list-group-item bg-dark-as-box-shadow">([\s\S]*?)<\/li>/g;
-    let itemMatch;
-    
-    while ((itemMatch = itemRegex.exec(html)) !== null) {
-        const itemBlock = itemMatch[1];
-        
-        const linkMatch = itemBlock.match(/<a href="(https:\/\/www\.animesaturn\.cx\/anime\/[^"]+)" class="thumb image-wrapper">/);
-        if (!linkMatch) continue;
-        
-        const animeUrl = linkMatch[1].trim();
-        
-        const urlParts = animeUrl.split("/");
-        const titleFromUrl = urlParts[urlParts.length - 1].replace(/-/g, " ");
-        
-        const imageMatch = itemBlock.match(/<img src="(https:\/\/cdn\.animesaturn\.cx\/static\/images\/locandine\/[^"]+)" alt="[^"]+" class="rounded locandina-archivio">/);
-        const imageUrl = imageMatch ? imageMatch[1].trim() : null;
-        
-        const titleMatch = itemBlock.match(/<a class="badge badge-archivio badge-light" href="[^"]+">([^<]+)<\/a>/);
-        const title = titleMatch ? titleMatch[1].trim() : titleFromUrl;
-        
+
+    const regex = /<a href="(https:\/\/www\.animesaturn\.cx\/anime\/[^"]+)"[^>]*class="thumb image-wrapper">\s*<img src="(https:\/\/cdn\.animesaturn\.cx\/static\/images\/copertine\/[^"]+)"[^>]*alt="([^"]+)"/g;
+
+    let match;
+    while ((match = regex.exec(html)) !== null) {
         results.push({
-            title: title,
-            image: imageUrl,
-            href: animeUrl
+            title: match[3].trim(),
+            image: match[2].trim(),
+            href: match[1].trim()
         });
     }
-    
+
     return JSON.stringify(results);
 }
 
