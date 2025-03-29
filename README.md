@@ -9,7 +9,7 @@
   <img src="https://github.com/50n50/sources/blob/main/asset.png?raw=true" width="500px">
 </div>
 
-## My Modules (29)
+## My Modules (30)
 <!--- ENGLISH ======================================================================================================= START--->
 <details>
 
@@ -611,6 +611,22 @@
 **App version:** V2 and up <br>
 **Author:** 50/50 <br><br>
 [<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/ddys/ddys.json)
+</details>
+<details>
+
+<summary>
+  
+### 1️⃣ Dora-Video 
+
+</summary>
+<img src="https://www.dora-video.cn/favicon.ico" width="125px"><br>
+
+**File:** `Dora-Video.json`  
+**Description:** Dora-Video JavaScript module that directly scrapes the website (requires `Dora-Video.js`). <br> 
+**Language:** Chinese. <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/dora-video/dora-video.json)
 </details>
 </details>
 
