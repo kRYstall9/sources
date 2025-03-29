@@ -1,6 +1,6 @@
 async function searchResults(keyword) {
     const results = [];
-    const response = await fetchv2(https://www.animesaturn.cx/animelist?search=${keyword});
+    const response = await fetchv2(`https://www.animesaturn.cx/animelist?search=${keyword}`);
     const html = await response.text();
 
     const regex = /<a href="(https:\/\/www\.animesaturn\.cx\/anime\/[^"]+)"[^>]*class="thumb image-wrapper">\s*<img src="(https:\/\/cdn\.animesaturn\.cx\/static\/images\/copertine\/[^"]+)"[^>]*alt="([^"]+)"/g;
