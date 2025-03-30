@@ -690,13 +690,13 @@
 
 <!--- ITALIAN ======================================================================================================= END --->
 ##
-<!--- TAGALOG ======================================================================================================= START --->
+<!--- FILIPINO ======================================================================================================= START --->
 
 <details>
 
 <summary>
 
-### Tagalog 🇵🇭
+### Filipino 🇵🇭
 
 </summary>
 <details>
@@ -711,14 +711,14 @@
 **File:** `Jungopinoy.json`  
 **Description:** Jungopinoy JavaScript module that directly scrapes the website (requires `Jungopinoy.js`). <br> 
 **Note:** *⚠️ Limited catalog, seeing as it's just scraping all data from the homepage and filtering* <br>
-**Language:** Tagalog. <br>
+**Language:** Filipino. <br>
 **App version:** V2 and up <br>
 **Author:** 50/50 <br><br>
 [<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/jungopinoy/jungopinoy.json)
 </details>
 </details>
 
-<!--- TAGALOG ======================================================================================================= END --->
+<!--- FILIPINO ======================================================================================================= END --->
 
 ## Other authors <sub><sup>(Not made by me I only manage them.)</sup></sub>
 <!--- ENGLISH ======================================================================================================= START --->
