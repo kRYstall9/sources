@@ -13,5 +13,6 @@
     "searchBaseUrl": "https://jungopinoy.com/%s",
     "scriptUrl": "https://raw.githubusercontent.com/50n50/sources/refs/heads/main/jungopinoy/jungopinoy.js",
     "asyncJS": true,
-    "type": "movies/shows"
+    "type": "movies/shows",
+    "note": "⚠️ Limited catalog, seeing as it's just scraping all data from the homepage and filtering"
 }
