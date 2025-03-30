@@ -139,7 +139,7 @@
 
 <summary>
   
-### 8️⃣ GojoWTF (AnimePahe) 
+### 8️⃣ GojoWTF (AnimePahe) (SUB)
 
 </summary>
 
