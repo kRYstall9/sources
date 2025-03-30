@@ -90,7 +90,10 @@ async function extractStreamUrl(url) {
     const response = await fetchv2(`https://backend.gojo.wtf/api/anime/tiddies?provider=pahe&id=${id}&num=${number}&subType=sub&watchId=${number}&dub_id=null`, headers);
     const json = await response.json();
 
-    const stream1080p = json.sources.find(source => source.quality === "1080p");
+const stream1080p = 
+    json.sources.find(source => source.quality === "1080p") || 
+    json.sources.find(source => source.quality === "720p") || 
+    json.sources.find(source => source.quality === "360p");
 
     if (stream1080p) {
         console.log(`1080p URL: ${stream1080p.url}`);
