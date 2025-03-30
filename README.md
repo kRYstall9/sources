@@ -9,7 +9,7 @@
   <img src="https://github.com/50n50/sources/blob/main/asset.png?raw=true" width="500px">
 </div>
 
-## My Modules (32)
+## My Modules (33)
 <!--- ENGLISH ======================================================================================================= START--->
 <details>
 
@@ -385,6 +385,21 @@
 **App version:** V2 and up <br>
 **Author:** 50/50 <br><br>
 [<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/fireanime/FireAnimeGer.json)
+</details>
+<details>
+<summary>
+  
+### 3️⃣ AnimeToast
+
+</summary>
+<img src="https://www.animetoast.cc/wp-content/uploads/2018/03/toastfavi-300x300.png" width="125px"><br>
+
+**File:** `AnimeToast.json`  
+**Description:** AnimeToast JavaScript module that directly scrapes the site (requires `AnimeToast.js`). <br> 
+**Language:** German. (DUB/SUB) <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/animetoast/animetoast.json)
 </details>
 </details>
 
