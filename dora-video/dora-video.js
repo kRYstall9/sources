@@ -8,7 +8,7 @@ async function searchResults(keyword) {
     let match;
     while ((match = regex.exec(html)) !== null) {
         results.push({
-            title: (match[3] || "").trim().replace(/<font color="red">a<\/font>/g, " "),
+            title: (match[3] || "").trim().replace(/<font color="red">a<\/font>|<font color="red">|<\/font>/g, " "),
             image: "https://i.ibb.co/ds7r6YJy/Search-has-no-images.png",
             href: match[1].trim()
         });
