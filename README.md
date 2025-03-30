@@ -135,6 +135,21 @@
 **Author:** 50/50 <br><br>
 [<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/kimcartoon/kimcartoon.json)
 </details>
+<details>
+
+<summary>
+  
+### 8️⃣ GojoWTF (AnimePahe) 
+
+</summary>
+
+**File:** `gojowtf.json`  
+**Description:** GojoWTF JavaScript module that uses their API (requires `gojowtf.js`). <br> 
+**Language:** English. (HARDSUB) <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/gojowtf/gojowtf.json)
+</details>
 
 
 </details>
