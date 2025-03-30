@@ -9,7 +9,7 @@
     "language": "English (SUB)",
     "streamType": "HLS",
     "quality": "1080p",
-    "baseUrl": "https://gojo.wtf/",
+    "baseUrl": "https://gojo.wtf",
     "searchBaseUrl": "https://gojo.wtf",
     "scriptUrl": "https://raw.githubusercontent.com/50n50/sources/refs/heads/main/gojowtf/gojowtf.js",
     "asyncJS": true,
