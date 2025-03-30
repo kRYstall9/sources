@@ -9,7 +9,7 @@
   <img src="https://github.com/50n50/sources/blob/main/asset.png?raw=true" width="500px">
 </div>
 
-## My Modules (30)
+## My Modules (31)
 <!--- ENGLISH ======================================================================================================= START--->
 <details>
 
@@ -689,6 +689,36 @@
 </details>
 
 <!--- ITALIAN ======================================================================================================= END --->
+##
+<!--- TAGALOG ======================================================================================================= START --->
+
+<details>
+
+<summary>
+
+### Tagalog 🇵🇭
+
+</summary>
+<details>
+
+<summary>
+  
+### 1️⃣ Jungopinoy (Movies/TV shows) (⚠️ Read note)
+
+</summary>
+<img src="https://images-ext-1.discordapp.net/external/9CnHKlJ_zd_WskOKFccSRa4oNt5W7FBHCXvg53EC9fs/%3Fsz%3D64%26domain_url%3Dhttps%253A%252F%252Fjungopinoy.com/https/www.google.com/s2/favicons?format=webp&width=128&height=128" width="125px"><br>
+
+**File:** `Jungopinoy.json`  
+**Description:** Jungopinoy JavaScript module that directly scrapes the website (requires `Jungopinoy.js`). <br> 
+**Note:** *⚠️ Limited catalog, seeing as it's just scraping all data from the homepage and filtering* <br>
+**Language:** Tagalog. <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/jungopinoy/jungopinoy.json)
+</details>
+</details>
+
+<!--- TAGALOG ======================================================================================================= END --->
 
 ## Other authors <sub><sup>(Not made by me I only manage them.)</sup></sub>
 <!--- ENGLISH ======================================================================================================= START --->
