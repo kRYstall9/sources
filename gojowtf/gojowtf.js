@@ -67,7 +67,7 @@ async function extractEpisodes(id) {
     if (paheProvider && paheProvider.episodes) {
         paheProvider.episodes.forEach(episode => {
             results.push({
-                href: `${id}/${episode.number}`, 
+                href: `${id}/${episode.id}`, 
                 number: episode.number
             });
         });
