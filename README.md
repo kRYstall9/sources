@@ -9,7 +9,7 @@
   <img src="https://github.com/50n50/sources/blob/main/asset.png?raw=true" width="500px">
 </div>
 
-## My Modules (35)
+## My Modules (36)
 <!--- ENGLISH ======================================================================================================= START--->
 <details>
 
@@ -149,6 +149,21 @@
 **App version:** V2 and up <br>
 **Author:** 50/50 <br><br>
 [<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/gojowtf/gojowtf.json)
+</details>
+<details>
+
+<summary>
+  
+### 1️⃣0️⃣ Soaper.Live
+
+</summary>
+
+**File:** `soaperlive.json`  
+**Description:** Soaper.Live JavaScript module that directly scrapes the website (requires `soaperlive.js`). <br> 
+**Language:** English. <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/soaperlive/soaperlive.json)
 </details>
 
 
