@@ -9,7 +9,7 @@
   <img src="https://github.com/50n50/sources/blob/main/asset.png?raw=true" width="500px">
 </div>
 
-## My Modules (34)
+## My Modules (35)
 <!--- ENGLISH ======================================================================================================= START--->
 <details>
 
@@ -646,7 +646,7 @@
 
 <summary>
   
-### 1️⃣ Dora-Video 
+### 2️⃣ Dora-Video 
 
 </summary>
 <img src="https://www.dora-video.cn/favicon.ico" width="125px"><br>
@@ -657,6 +657,23 @@
 **App version:** V2 and up <br>
 **Author:** 50/50 <br><br>
 [<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/dora-video/dora-video.json)
+</details>
+<details>
+
+<summary>
+  
+### 3️⃣ 樱花动漫 (⚠️ Read note)
+
+</summary>
+<img src="http://www.iyinghua.com/js/20180601/favicon.ico" width="125px"><br>
+
+**File:** `iyinghua.json`  
+**Description:** Iyinghua JavaScript module that directly scrapes the website (requires `iyinghua.js`). <br> 
+**Note:** *⚠️ Some stuff is region locked* <br>
+**Language:** Chinese. <br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/iyinghua/iyinghua.json)
 </details>
 </details>
 
@@ -675,13 +692,14 @@
 
 <summary>
   
-### 1️⃣ KuramAnime (Anime)
+### 1️⃣ KuramAnime (Anime) (⚠️ Read note)
 
 </summary>
 <img src="https://v6.kuramanime.run/assets/img/logo-full-256.png" width="125px"><br>
 
 **File:** `KuramAnime.json`  
 **Description:** KuramAnime JavaScript module that directly scrapes the website (requires `KuramAnime.js`). <br> 
+**Note:** *⚠️ Requires external player like VLC* <br>
 **Language:** Indonesian. <br>
 **App version:** V2 and up <br>
 **Author:** 50/50 <br><br>
