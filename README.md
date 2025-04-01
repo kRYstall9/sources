@@ -172,6 +172,7 @@
 ### 1️⃣1️⃣ AnimeNoSub
 
 </summary>
+<img src="https://i3.wp.com/animenosub.to/wp-content/uploads/2024/04/cropped-favicon-192x192.png" width="125px"><br>
 
 **File:** `AnimeNoSub.json`  
 **Description:** AnimeNoSub JavaScript module that directly scrapes the website (requires `AnimeNoSub.js`). <br> 
