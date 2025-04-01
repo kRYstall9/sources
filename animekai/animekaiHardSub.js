@@ -325,37 +325,38 @@ const KAICODEX = {
     },
     decMega(n) {
         var o = KAICODEX.safeAtob;
-        var e = KAICODEX.rc4;
-        var c = KAICODEX.replaceChars;
-        var v = KAICODEX.reverseString;
-        n = c(
-            e('fnxEj3tD4Bl0X',
+        var i = KAICODEX.rc4;
+        var f = KAICODEX.replaceChars;
+        var c = KAICODEX.reverseString;
+        n =
+            i(
+                'A6mkJw3XMsruY',
                 o(
-                    e('IjilzMV57GrnF',
-                        o(
-                            c(
-                                v(
-                                    c(
-                                        e(
-                                            'PlzI69YVCtGwoa8',
-                                            o(
-                                                o(n)
+                    f(
+                        i(
+                            'Sv7tijKFrwDxsl9',
+                            o(
+                                f(
+                                    i(
+                                        'j8971KLwSyI',
+                                        o(
+                                            c(
+                                                f(
+                                                    o(n),
+                                                    'kxV4iJtRZg3',
+                                                    'VJx34RtgkZi'
+                                                )
                                             )
-                                        ),
-                                        'c2IfHZwSX1mj',
-                                        'mwfXcS2ZjI1H'
-                                    )
-                                ),
-                                '82NkgQDYbIF',
-                                '82IQNkFgYbD'
+                                        )
+                                    ),
+                                    'BjZ9dF6AxHTqn',
+                                    'jxqZdB6n9FTHA')
                             )
-                        )
-                    )
+                        ),
+                        'FpPBdhzCyGYoDvO',
+                        'YGFpvoBdCyDPhzO')
                 )
-            ),
-            'crwkth05iJR8',
-            'JRkt8rw0i5ch'
-        );
+            );
         return decodeURIComponent(n);
     },
 
@@ -399,6 +400,7 @@ const KAICODEX = {
         return s.split("").map(v => m[v] || v).join('');
     }
 };
+
 
 function btoa(input) {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
