@@ -324,39 +324,43 @@ const KAICODEX = {
         );
     },
     decMega(n) {
-        var o = KAICODEX.safeAtob;
-        var i = KAICODEX.rc4;
-        var f = KAICODEX.replaceChars;
-        var c = KAICODEX.reverseString;
-        n =
-            i(
-                'A6mkJw3XMsruY',
-                o(
-                    f(
-                        i(
-                            'Sv7tijKFrwDxsl9',
-                            o(
-                                f(
-                                    i(
-                                        'j8971KLwSyI',
-                                        o(
-                                            c(
-                                                f(
-                                                    o(n),
-                                                    'kxV4iJtRZg3',
-                                                    'VJx34RtgkZi'
+        var base64_url_decode = KAICODEX.safeAtob;
+        var transform = KAICODEX.rc4;
+        var substitute = KAICODEX.replaceChars;
+        var reverse_it = KAICODEX.reverseString;
+
+        n = substitute(
+            transform(
+                "Pga3kHbfN1",
+                base64_url_decode(
+                    reverse_it(
+                        substitute(
+                            transform(
+                                "twUI4s9kDrT3qb",
+                                base64_url_decode(
+                                    reverse_it(
+                                        substitute(
+                                            transform(
+                                                "TyrGFfhi40zq",
+                                                base64_url_decode(
+                                                    reverse_it(base64_url_decode(n))
                                                 )
-                                            )
+                                            ),
+                                            "4zSetv9CNImRdiq",
+                                            "i94NvzeIRCqdtSm"
                                         )
-                                    ),
-                                    'BjZ9dF6AxHTqn',
-                                    'jxqZdB6n9FTHA')
-                            )
-                        ),
-                        'FpPBdhzCyGYoDvO',
-                        'YGFpvoBdCyDPhzO')
+                                    )
+                                )
+                            ),
+                            "vfIiqFKutaW",
+                            "tqaiKIfuvWF"
+                        )
+                    )
                 )
-            );
+            ),
+            "vnb0rLzdZN6a",
+            "vNZnrzd60baL"
+        );
         return decodeURIComponent(n);
     },
 
@@ -400,6 +404,7 @@ const KAICODEX = {
         return s.split("").map(v => m[v] || v).join('');
     }
 };
+
 
 
 function btoa(input) {
