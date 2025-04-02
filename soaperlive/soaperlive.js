@@ -43,21 +43,21 @@ async function extractEpisodes(url) {
     const html = await response.text();
     const regex = /<a href="([^"]+)">\s*(\d+)\.[^<]+<\/a>/g;
     let match;
-    
+
     while ((match = regex.exec(html)) !== null) {
         results.push({
-            href: "https://soaper.live" + match[1].trim(),
+            href: "Episode: https://soaper.live" + match[1].trim(),
             number: parseInt(match[2], 10)
         });
     }
 
     if (results.length === 0) {
-        const movieRegex = /<a[^>]+href="https:\/\/twitter\.com\/home\/\?status=([^"]+)"/;        
+        const movieRegex = /<a[^>]+href="https:\/\/twitter\.com\/home\/\?status=([^"]+)"/;
         const movieMatch = movieRegex.exec(html);
 
         if (movieMatch) {
             results.push({
-                href: movieMatch[1].trim(),
+                href: "Movie: " + movieMatch[1].trim(),
                 number: 1
             });
         }
@@ -67,38 +67,81 @@ async function extractEpisodes(url) {
 }
 
 async function extractStreamUrl(url) {
-    const response = await fetchv2(url);
-    const firstHtml = await response.text();
+    let actualUrl;
+    let isMovie = false;
 
-    const idRegex = /<input type="hidden" id="hId" value="([^"]+)">/;
-    const idMatch = idRegex.exec(firstHtml);
+    if (url.startsWith("Episode: ")) {
+        actualUrl = url.substring("Episode: ".length);
+    } else if (url.startsWith("Movie: ")) {
+        actualUrl = url.substring("Movie: ".length);
+        isMovie = true;
+    } else {
+        actualUrl = url;
+    }
 
+    if (isMovie) {
+        const response = await fetchv2(actualUrl);
+        const firstHtml = await response.text();
+        const idRegex = /<input type="hidden" id="hId" value="([^"]+)">/;
+        const idMatch = idRegex.exec(firstHtml);
+        const hId = idMatch ? idMatch[1] : null;
+        console.error(hId);
 
-    const hId = idMatch ? idMatch[1] : null;
-    console.error(hId);
-    const postData = {
-        pass: `${hId}`,
-        param: "",
-        extra: "",
-        e2: "0",
-        server: "1"
-    };
+        const postData = {
+            pass: `${hId}`,
+            param: "",
+            extra: "",
+            e2: "0",
+            server: "0"
+        };
 
-    const headers = {
-        "Referer": "https://soaper.live",
-        "Content-Type": "application/json"
-    };
-    console.error(JSON.stringify(postData));
+        const headers = {
+            "Referer": "https://soaper.live",
+            "Content-Type": "application/json"
+        };
 
-    const responseText = await fetchv2("https://soaper.live/home/index/GetMInfoAjax", headers, "POST", postData);
-    const jsonResponse = await responseText.text();
-    console.error(jsonResponse);
+        console.error(JSON.stringify(postData));
+        const responseText = await fetchv2("https://soaper.live/home/index/GetMInfoAjax", headers, "POST", postData);
+        const jsonResponse = await responseText.text();
+        console.error(jsonResponse);
 
-    const hlsRegex = /"val":"\\\/dev\\\/Apis\\\/tw_m3u8\?key=([^"]+)"/;
-    const hlsMatch = hlsRegex.exec(jsonResponse);
-    const hlsUrl = hlsMatch ? `/dev/Apis/tw_m3u8?key=${hlsMatch[1]}` : null;
-    
-    console.error(hlsUrl);
-    return `https://soaper.live${hlsUrl}`;
+        const hlsRegex = /"val":"([^"]+)"/;
+        const hlsMatch = hlsRegex.exec(jsonResponse);
+        const hlsUrl = hlsMatch ? hlsMatch[1].replace(/\\\//g, "/") : null;
+        console.error(hlsUrl);
+
+        return hlsUrl ? `https://soaper.live${hlsUrl}` : null;
+    } else {
+        const response = await fetchv2(actualUrl);
+        const firstHtml = await response.text();
+        const idRegex = /<input type="hidden" id="hId" value="([^"]+)">/;
+        const idMatch = idRegex.exec(firstHtml);
+        const hId = idMatch ? idMatch[1] : null;
+        console.error(hId);
+
+        const postData = {
+            pass: `${hId}`,
+            param: "",
+            extra: "",
+            e2: "0",
+            server: "0"
+        };
+
+        const headers = {
+            "Referer": "https://soaper.live",
+            "Content-Type": "application/json"
+        };
+
+        console.error(JSON.stringify(postData));
+        const responseText = await fetchv2("https://soaper.live/home/index/GetEInfoAjax", headers, "POST", postData);
+        const jsonResponse = await responseText.text();
+        console.error(jsonResponse);
+
+        const hlsRegex = /"val":"([^"]+)"/;
+        const hlsMatch = hlsRegex.exec(jsonResponse);
+        const hlsUrl = hlsMatch ? hlsMatch[1].replace(/\\\//g, "/") : null;
+        console.error( hlsUrl);
+
+        return hlsUrl ? `https://soaper.live${hlsUrl}` : null;
+    }
 }
-

@@ -9,7 +9,7 @@
   <img src="https://github.com/50n50/sources/blob/main/asset.png?raw=true" width="500px">
 </div>
 
-## My Modules (36)
+## My Modules (37)
 <!--- ENGLISH ======================================================================================================= START--->
 <details>
 
@@ -154,7 +154,7 @@
 
 <summary>
   
-### 1️⃣0️⃣ Soaper.Live
+### 1️⃣0️⃣ Soaper.Live (Movies/Shows)
 
 </summary>
 
@@ -164,6 +164,22 @@
 **App version:** V2 and up <br>
 **Author:** 50/50 <br><br>
 [<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/soaperlive/soaperlive.json)
+</details>
+<details>
+
+<summary>
+  
+### 1️⃣1️⃣ AnimeNoSub
+
+</summary>
+<img src="https://i3.wp.com/animenosub.to/wp-content/uploads/2024/04/cropped-favicon-192x192.png" width="125px"><br>
+
+**File:** `AnimeNoSub.json`  
+**Description:** AnimeNoSub JavaScript module that directly scrapes the website (requires `AnimeNoSub.js`). <br> 
+**Language:** English. (DUB/SUB)<br>
+**App version:** V2 and up <br>
+**Author:** 50/50 <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/animenosub/animenosub.json)
 </details>
 
 
