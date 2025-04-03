@@ -330,36 +330,36 @@ const KAICODEX = {
         var reverse_it = KAICODEX.reverseString;
 
         n = substitute(
-            transform(
-                "Pga3kHbfN1",
-                base64_url_decode(
-                    reverse_it(
-                        substitute(
-                            transform(
-                                "twUI4s9kDrT3qb",
-                                base64_url_decode(
+            reverse_it(
+                transform(
+                    "3U8XtHJfgam02k",
+                    base64_url_decode(
+                        transform(
+                            "PgiY5eIZWn",
+                            base64_url_decode(
+                                substitute(
                                     reverse_it(
                                         substitute(
                                             transform(
-                                                "TyrGFfhi40zq",
+                                                "QKbVomcBHysCW9",
                                                 base64_url_decode(
-                                                    reverse_it(base64_url_decode(n))
+                                                    reverse_it(
+                                                        base64_url_decode(n)
+                                                    )
                                                 )
                                             ),
-                                            "4zSetv9CNImRdiq",
-                                            "i94NvzeIRCqdtSm"
+                                            "0GsO8otUi21aY", "Go1UiY82st0Oa"
                                         )
-                                    )
+                                    ),
+                                    "rXjnhU3SsbEd", "rXEsS3nbjhUd"
                                 )
-                            ),
-                            "vfIiqFKutaW",
-                            "tqaiKIfuvWF"
+                            )
                         )
                     )
                 )
             ),
-            "vnb0rLzdZN6a",
-            "vNZnrzd60baL"
+            "7DtY4mHcMA2yIL", "IM7Am4D2yYHctL"
+
         );
         return decodeURIComponent(n);
     },
@@ -404,6 +404,7 @@ const KAICODEX = {
         return s.split("").map(v => m[v] || v).join('');
     }
 };
+
 
 
 
