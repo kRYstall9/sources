@@ -62,7 +62,7 @@ async function searchResults(keyword) {
 
   async function extractStreamUrl(url) {
     const code = url.split('/')[url.split('/').length - 1];
-    const newUrl = `https://heatherwholeinvolve.com/e/${code}`;
+    const newUrl = `https://nathanfromsubject.com/e/${code}`;
     const response = await fetchv2(newUrl);
     const html = await response.text();
     
