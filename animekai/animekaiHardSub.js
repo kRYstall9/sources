@@ -323,45 +323,14 @@ const KAICODEX = {
             )
         );
     },
+
     decMega(n) {
-        var base64_url_decode = KAICODEX.safeAtob;
-        var transform = KAICODEX.rc4;
-        var substitute = KAICODEX.replaceChars;
-        var reverse_it = KAICODEX.reverseString;
-
-        n = substitute(
-            reverse_it(
-                transform(
-                    "3U8XtHJfgam02k",
-                    base64_url_decode(
-                        transform(
-                            "PgiY5eIZWn",
-                            base64_url_decode(
-                                substitute(
-                                    reverse_it(
-                                        substitute(
-                                            transform(
-                                                "QKbVomcBHysCW9",
-                                                base64_url_decode(
-                                                    reverse_it(
-                                                        base64_url_decode(n)
-                                                    )
-                                                )
-                                            ),
-                                            "0GsO8otUi21aY", "Go1UiY82st0Oa"
-                                        )
-                                    ),
-                                    "rXjnhU3SsbEd", "rXEsS3nbjhUd"
-                                )
-                            )
-                        )
-                    )
-                )
-            ),
-            "7DtY4mHcMA2yIL", "IM7Am4D2yYHctL"
-
-        );
-        return decodeURIComponent(n);
+        var a = KAICODEX.safeAtob;
+        var b = KAICODEX.rc4;
+        var c = KAICODEX.replaceChars;
+        var d = KAICODEX.reverseString;
+        var e = decodeURIComponent;
+        return e(d(b("hI8JxsWF9G", a(c(b("HzdLUrxnhcS", a(c(d(d(c(b("Zd5yYckQ38h", a(a(n))), "RuFt8YWnQA", "RQunFW8AYt"))), "GJRdPQgXn34ul", "JGQ34nPlRudgX"))), "9mz6PhsUQVNS", "mN9sQhVUPSz6")))));
     },
 
     /* Helper */
@@ -404,6 +373,7 @@ const KAICODEX = {
         return s.split("").map(v => m[v] || v).join('');
     }
 };
+
 
 
 
