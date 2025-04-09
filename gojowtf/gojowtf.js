@@ -5,7 +5,8 @@ async function searchResults(keyword) {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     };
 
-    const response = await fetchv2(`https://backend.gojo.wtf/api/anime/search?query=${keyword}&page=1&perPage=35`, headers);
+    const encodedKeyword = encodeURIComponent(keyword);
+    const response = await fetchv2(`https://backend.gojo.wtf/api/anime/search?query=${encodedKeyword}&page=1`, headers);
     const json = await response.json();
 
     json.results.forEach(anime => {
