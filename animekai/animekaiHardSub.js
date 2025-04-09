@@ -7,7 +7,8 @@ async function searchResults(keyword) {
 
         const encodedKeyword = encodeURIComponent(keyword);
         const searchUrl = `https://animekai.to/browser?keyword=${encodedKeyword}`;
-        const responseText = await fetch(searchUrl);
+        const response = await fetchv2(searchUrl);
+        const responseText = await response.text();
 
         const results = [];
         const baseUrl = "https://animekai.to";
@@ -54,7 +55,9 @@ async function extractDetails(url) {
     try {
 
         const fetchUrl = `${url}`;
-        const responseText = await fetch(fetchUrl);
+        const response = await fetchv2(fetchUrl);
+        const responseText = await response.text();
+
 
         const details = [];
 
@@ -88,7 +91,12 @@ async function extractEpisodes(url) {
     try {
 
         const fetchUrlForId = `${url}`;
-        const responseTextForId = await fetch(fetchUrlForId);
+        const repsonse = await fetchv2(fetchUrlForId);
+        const responseTextForId = await repsonse.text();
+
+        const kaiCodexContent = await loadKaiCodex();
+        const patchedKaiCodex = kaiCodexContent + "\nthis.KAICODEX = KAICODEX;";  // attach to global scope
+        (0, eval)(patchedKaiCodex);  // Now it should be visible globally
 
         const rateBoxIdRegex = /<div class="rate-box"[^>]*data-id="([^"]+)"/;
         const idMatch = responseTextForId.match(rateBoxIdRegex);
@@ -96,9 +104,8 @@ async function extractEpisodes(url) {
         const urlFetchToken = KAICODEX.enc(aniId);
 
         const fetchUrlListApi = `https://animekai.to/ajax/episodes/list?ani_id=${aniId}&_=${urlFetchToken}`;
-        const responseTextListApi = await fetch(fetchUrlListApi);
-
-        const data = await JSON.parse(responseTextListApi);
+        const responseTextListApi = await fetchv2(fetchUrlListApi);
+        const data = await responseTextListApi.json();
 
         let htmlContentListApi = "";
         htmlContentListApi = cleanJsonHtml(data.result);
@@ -132,11 +139,15 @@ async function extractEpisodes(url) {
 
 async function extractStreamUrl(url) {
     try {
-        const baseUrl = 'https://aniworld.to';
         const fetchUrl = `${url}`;
-        const text = await fetch(fetchUrl);
-
+        const reponse = await fetchv2(fetchUrl);
+        const text = await reponse.text();
         const cleanedHtml = cleanJsonHtml(text);
+
+        const kaiCodexContent = await loadKaiCodex();
+        const patchedKaiCodex = kaiCodexContent + "\nthis.KAICODEX = KAICODEX;";  // attach to global scope
+        (0, eval)(patchedKaiCodex);  // Now it should be visible globally
+
 
         // Extract div blocks with their content
         const subRegex = /<div class="server-items lang-group" data-id="sub"[^>]*>([\s\S]*?)<\/div>/;
@@ -173,8 +184,8 @@ async function extractStreamUrl(url) {
                 // https://animekai.to/ajax/links/view?id=dIS48a6p6A&_=UVpJN001ckY4cHh4R3I4QVJWM2RqTFdCeFQ
                 fetchUrlServerApi = `https://animekai.to/ajax/links/view?id=${dataLid}&_=${dataLidToken}`;
 
-                const responseTextServerApi = await fetch(fetchUrlServerApi);
-                const dataServerApi = await JSON.parse(responseTextServerApi);
+                const responseTextServerApi = await fetchv2(fetchUrlServerApi);
+                const dataServerApi = await responseTextServerApi.json();
 
                 KaiMegaUrlJson = KAICODEX.dec(dataServerApi.result);
                 megaELinkJson = JSON.parse(KaiMegaUrlJson);
@@ -182,9 +193,8 @@ async function extractStreamUrl(url) {
                 megaMediaUrl = megaEmbeddedUrl.replace("/e/", "/media/");
 
                 // Fetch the media url
-                const mediaUrl = await fetch(megaMediaUrl);
-                const mediaText = await mediaUrl;
-                const mediaJson = await JSON.parse(mediaText);
+                const mediaUrl = await fetchv2(megaMediaUrl);
+                const mediaJson = await mediaUrl.json();
 
                 streamUrlJson = mediaJson.result;
                 streamUrlJson = KAICODEX.decMega(streamUrlJson);
@@ -237,145 +247,16 @@ function cleanJsonHtml(jsonHtml) {
 }
 
 // Credits to @AnimeTV Project for the KAICODEX
-const KAICODEX = {
-    /* ANIMEKAI CODEX */
-    enc(n) {
-        var u = KAICODEX.safeBtoa;
-        var a = KAICODEX.rc4;
-        var s = KAICODEX.replaceChars;
-        var r = KAICODEX.reverseString;
-        n = u(
-            s(
-                u(
-                    a(
-                        'sXmH96C4vhRrgi8',
-                        r(
-                            r(
-                                u(
-                                    a('kOCJnByYmfI', s(
-                                        s(
-                                            r(
-                                                u(
-                                                    a('0DU8ksIVlFcia2', n)
-                                                )
-                                            ),
-                                            '1wctXeHqb2', '1tecHq2Xbw'
-                                        ),
-                                        '48KbrZx1ml', 'Km8Zb4lxr1'
-                                    )
-                                    )
-                                )
-                            )
-                        )
-                    )
-                ), 'hTn79AMjduR5', 'djn5uT7AMR9h')
-        );
-        return encodeURIComponent(n);
-    },
-    encPlain(n) {
-        return KAICODEX.safeBtoa(KAICODEX.rc4(
-            'n1PEbDBiipbJZvZc',
-            encodeURIComponent(n)
-        ));
-    },
-    dec(n) {
-        var u = KAICODEX.safeAtob;
-        var a = KAICODEX.rc4;
-        var s = KAICODEX.replaceChars;
-        var r = KAICODEX.reverseString;
-        n = a(
-            '0DU8ksIVlFcia2',
-            u(
-                r(
-                    s(
-                        s(
-                            a('kOCJnByYmfI',
-                                u(
-                                    r(
-                                        r(
-                                            a(
-                                                'sXmH96C4vhRrgi8',
-                                                u(
-                                                    s(
-                                                        u(n),
-                                                        'djn5uT7AMR9h',
-                                                        'hTn79AMjduR5'
-                                                    )
-                                                )
-                                            )
-                                        )
-                                    )
-                                )
-                            ), 'Km8Zb4lxr1', '48KbrZx1ml'
-                        ),
-                        '1tecHq2Xbw', '1wctXeHqb2'
-                    )
-                )
-            )
-        )
-        return decodeURIComponent(n);
-    },
-    decPlain(n) {
-        return decodeURIComponent(
-            KAICODEX.rc4(
-                'n1PEbDBiipbJZvZc',
-                KAICODEX.safeAtob(n)
-            )
-        );
-    },
-
-    decMega(n) {
-        var a = KAICODEX.safeAtob;
-        var b = KAICODEX.rc4;
-        var c = KAICODEX.replaceChars;
-        var d = KAICODEX.reverseString;
-        var e = decodeURIComponent;
-        return e(d(b("hI8JxsWF9G", a(c(b("HzdLUrxnhcS", a(c(d(d(c(b("Zd5yYckQ38h", a(a(n))), "RuFt8YWnQA", "RQunFW8AYt"))), "GJRdPQgXn34ul", "JGQ34nPlRudgX"))), "9mz6PhsUQVNS", "mN9sQhVUPSz6")))));
-    },
-
-    /* Helper */
-    rc4: function (key, str) {
-        var s = [], j = 0, x, res = '';
-        for (var i = 0; i < 256; i++) {
-            s[i] = i;
-        }
-        for (i = 0; i < 256; i++) {
-            j = (j + s[i] + key.charCodeAt(i % key.length)) % 256;
-            x = s[i];
-            s[i] = s[j];
-            s[j] = x;
-        }
-        i = 0;
-        j = 0;
-        for (var y = 0; y < str.length; y++) {
-            i = (i + 1) % 256;
-            j = (j + s[i]) % 256;
-            x = s[i];
-            s[i] = s[j];
-            s[j] = x;
-            res += String.fromCharCode(str.charCodeAt(y) ^ s[(s[i] + s[j]) % 256]);
-        }
-        return res;
-    },
-    safeBtoa: function (s) {
-        return btoa(s).replace(/\//g, '_').replace(/\+/g, '-').replace(/\=/g, '');
-    },
-    safeAtob: function (s) {
-        return atob(s.replace(/_/g, '/').replace(/-/g, '+'));
-    },
-    reverseString: function (s) {
-        return s.split('').reverse().join('');
-    },
-    replaceChars: function (s, f, r) {
-        let i = f.length;
-        let m = {};
-        while (i-- && (m[f[i]] = r[i])) { }
-        return s.split("").map(v => m[v] || v).join('');
+async function loadKaiCodex() {
+    try {
+        const url = 'https://raw.githubusercontent.com/amarullz/kaicodex/refs/heads/main/generated/kai_codex.js';
+        const response = await fetchv2(url);
+        const scriptText = await response.text();
+        return scriptText;
+    } catch (error) {
+        console.log("Load Kaicodex error:" + error)
     }
-};
-
-
-
+}
 
 
 function btoa(input) {
