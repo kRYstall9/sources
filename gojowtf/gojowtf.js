@@ -114,7 +114,8 @@ function cleanHtmlSymbols(string) {
         .replace(/&#[0-9]+;/g, "")
         .replace(/\r?\n|\r/g, " ")  // Replace any type of newline with a space
         .replace(/\s+/g, " ")       // Replace multiple spaces with a single space
-        .replace(/<i[^>]*>(.*?)<\/i>/g, "")
+        .replace(/<i[^>]*>(.*?)<\/i>/g, "$1")
+        .replace(/<b[^>]*>(.*?)<\/b>/g, "$1") 
         .replace(/<[^>]+>/g, "")
         .trim();                    // Remove leading/trailing whitespace
 }
