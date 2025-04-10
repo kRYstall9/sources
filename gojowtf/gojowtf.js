@@ -42,7 +42,7 @@ async function extractDetails(id) {
     const response = await fetchv2(`https://backend.gojo.wtf/api/anime/info/${id}`, headers);
     const json = await response.json();
 
-    const description = json.description || "No description available"; // Handling case where description might be missing
+    const description = cleanHtmlSymbols(json.description) || "No description available"; // Handling case where description might be missing
 
     results.push({
         description: description.replace(/<br>/g, ''),
@@ -105,3 +105,16 @@ const stream1080p =
     }
 }
 
+function cleanHtmlSymbols(string) {
+    if (!string) return "";
+
+    return string
+        .replace(/&#8217;/g, "'")
+        .replace(/&#8211;/g, "-")
+        .replace(/&#[0-9]+;/g, "")
+        .replace(/\r?\n|\r/g, " ")  // Replace any type of newline with a space
+        .replace(/\s+/g, " ")       // Replace multiple spaces with a single space
+        .replace(/<i[^>]*>(.*?)<\/i>/g, "")
+        .replace(/<[^>]+>/g, "")
+        .trim();                    // Remove leading/trailing whitespace
+}
