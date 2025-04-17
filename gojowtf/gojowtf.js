@@ -64,11 +64,31 @@ async function extractEpisodes(id) {
     const json = await response.json();
 
     const paheProvider = json.find(provider => provider.providerId === "pahe");
+    const zazaProvider = json.find(provider => provider.providerId === "zaza");
+    const strixProvider = json.find(provider => provider.providerId === "strix");
 
     if (paheProvider && paheProvider.episodes) {
         paheProvider.episodes.forEach(episode => {
             results.push({
-                href: `${id}/${episode.number}/${episode.id}`, 
+                href: `${id}/${episode.number}/${episode.id}/pahe`, 
+                number: episode.number
+            });
+        });
+    }
+
+    if (zazaProvider && zazaProvider.episodes) {
+        zazaProvider.episodes.forEach(episode => {
+            results.push({
+                href: `${id}/${episode.number}/${episode.id}/zaza`, 
+                number: episode.number
+            });
+        });
+    }
+
+    if (strixProvider && strixProvider.episodes) {
+        strixProvider.episodes.forEach(episode => {
+            results.push({
+                href: `${id}/${episode.number}/${episode.id}/strix`, 
                 number: episode.number
             });
         });
@@ -79,9 +99,9 @@ async function extractEpisodes(id) {
 }
 
 async function extractStreamUrl(url) {
-    const [id, number, episodeId] = url.split('/');  
+    const [id, number, episodeId, provider] = url.split('/');  
     
-    console.error(`ID: ${id}, Number: ${number}, Episode ID: ${episodeId}`);
+    console.error(`ID: ${id}, Number: ${number}, Episode ID: ${episodeId}, Provider: ${provider}`);
 
     const headers = {
         'Referer': 'https://gojo.wtf/',
@@ -97,7 +117,7 @@ async function extractStreamUrl(url) {
     const stream = json.sources.map(stream => stream.url);
 
     for (let i = 0; i < stream.length; i++) {
-        streams.push(quality[i]);
+        streams.push(`${provider} - ${quality[i]}`);
         streams.push(stream[i]);
     }
 
