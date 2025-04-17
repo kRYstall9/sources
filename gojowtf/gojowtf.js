@@ -68,7 +68,7 @@ async function extractEpisodes(id) {
     if (paheProvider && paheProvider.episodes) {
         paheProvider.episodes.forEach(episode => {
             results.push({
-                href: `${id}/${episode.id}`, 
+                href: `${id}/${episode.id}/${episode.number}`, 
                 number: episode.number
             });
         });
@@ -78,31 +78,37 @@ async function extractEpisodes(id) {
     return JSON.stringify(results);
 }
 
-async function extractStreamUrl(url) {
-    const [id, number] = url.split('/');  
+async function extractStreamUrl2(url) {
+    const [id, number, episodeId] = url.split('/');  
     
-    console.error(`ID: ${id}, Number: ${number}`);
+    console.error(`ID: ${id}, Number: ${number}, Episode ID: ${episodeId}`);
 
     const headers = {
-        'Referer': 'https://gojo.wtf/',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        headers: {
+            'Referer': 'https://gojo.wtf/',
+            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        },
     };
 
-    const response = await fetchv2(`https://backend.gojo.wtf/api/anime/tiddies?provider=pahe&id=${id}&num=${number}&subType=sub&watchId=${number}&dub_id=null`, headers);
+    const response = await fetch(`https://backend.gojo.wtf/api/anime/tiddies?provider=pahe&id=${id}&num=${number}&subType=sub&watchId=${episodeId}&dub_id=null`, headers);
     const json = await response.json();
 
-const stream1080p = 
-    json.sources.find(source => source.quality === "1080p") || 
-    json.sources.find(source => source.quality === "720p") || 
-    json.sources.find(source => source.quality === "360p");
+    let streams = [];
 
-    if (stream1080p) {
-        console.log(`1080p URL: ${stream1080p.url}`);
-        return stream1080p.url;
-    } else {
-        console.error("1080p stream not found.");
-        return null;
+    const quality = json.sources.map(stream => stream.quality);
+    const stream = json.sources.map(stream => stream.url);
+
+    for (let i = 0; i < stream.length; i++) {
+        streams.push(quality[i]);
+        streams.push(stream[i]);
     }
+
+    const result = {
+        streams: streams
+    };
+
+    console.log(JSON.stringify(result));
+    return JSON.stringify(result);
 }
 
 function cleanHtmlSymbols(string) {
