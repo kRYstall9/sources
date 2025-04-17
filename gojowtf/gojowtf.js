@@ -78,7 +78,7 @@ async function extractEpisodes(id) {
     return JSON.stringify(results);
 }
 
-async function extractStreamUrl2(url) {
+async function extractStreamUrl(url) {
     const [id, number, episodeId] = url.split('/');  
     
     console.error(`ID: ${id}, Number: ${number}, Episode ID: ${episodeId}`);
