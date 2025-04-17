@@ -1,126 +1,92 @@
-function searchResults(html) {
-    const results = [];
-    const baseUrl = "https://www.animeunity.so/anime";
-    
-    const recordsRegex = /<archivio records="(.*?)"/;
-    const recordsMatch = html.match(recordsRegex);
+async function searchResults(keyword) {
+  const response = await fetchv2(
+    `https://www.animeunity.so/archivio?title=${keyword}`
+  );
+  const html = await response.text();
 
-    if (!recordsMatch) {
-        return results;
-    }
-    
-    const recordsJson = recordsMatch[1].replace(/&quot;/g, '"');
-    let recordsData;
-    
-    try {
-        recordsData = JSON.parse(recordsJson);
-    } catch (error) {
-        console.error('Error parsing JSON:', error);
-        return results;
-    }
-    
-    recordsData.forEach(record => {
-        if (!record || typeof record !== 'object') return;
+  const regex = /<archivio[^>]*records="([^"]*)"/;
+  const match = regex.exec(html);
 
-        const imageUrl = record.imageurl || '';
-        const title = record.title || record.title_eng || '';
-        const id = record.id || '';
-        const slug = record.slug || '';
-        
-        if (id && slug) {
-            const href = `${baseUrl}/${id}-${slug}`;
-            
-            results.push({
-                title: title.trim(),
-                image: imageUrl,
-                href: href
-            });
-        }
-    });
+  if (!match || !match[1]) {
+    return { results: [] };
+  }
 
-    return results;
+  const items = JSON.parse(match[1].replaceAll(`&quot;`, `"`));
+
+  const results =
+    items.map((item) => ({
+      title: item.title ?? item.title_eng,
+      image: item.imageurl,
+      href: `https://www.animeunity.so/info_api/${item.id}`,
+    })) || [];
+
+  return JSON.stringify(results);
 }
 
-function extractDetails(html) {
-    const details = [];
-    
-    const videoPlayerRegex = /<video-player anime="([^"]*)"/;
-    const videoPlayerMatch = html.match(videoPlayerRegex);
+async function extractDetails(url) {
+  const response = await fetchv2(url);
+  const json = JSON.parse(await response.text());
 
-    if (!videoPlayerMatch) {
-        return details;
-    }
-
-    const animeJson = videoPlayerMatch[1].replace(/&quot;/g, '"');
-    const animeData = JSON.parse(animeJson);
-
-    const description = animeData.plot || '';
-    const aliases = animeData.title_eng || '';
-    const airdate = animeData.title || '';
-
-    if (description && aliases && airdate && title) {
-        details.push({
-            description: description,
-            aliases: aliases,
-            airdate: airdate
-        });
-    }
-    
-    return details;
+  return JSON.stringify([
+    {
+      description: json.plot,
+      aliases: "N/A",
+      airdate: json.date,
+    },
+  ]);
 }
 
-function extractEpisodes(html) {
-    const episodes = [];
-    
-    const videoPlayerRegex = /<video-player[^>]*anime="([^"]*)"[^>]*episodes="([^"]*)"/;
-    const videoPlayerMatch = html.match(videoPlayerRegex);
+async function extractEpisodes(url, page = 1) {
+  const episodesPerPage = 120;
+  const lastPageEpisode = page * episodesPerPage;
+  const firstPageEpisode = lastPageEpisode - (episodesPerPage - 1);
+  const uurl = `${url}/1?start_range=${firstPageEpisode}&end_range=${lastPageEpisode}`;
 
-    if (!videoPlayerMatch) {
-        return episodes;
-    }
+  const response = await fetchv2(uurl);
+  const json = JSON.parse(await response.text());
 
-    const animeJson = videoPlayerMatch[1].replace(/&quot;/g, '"');
-    const animeData = JSON.parse(animeJson);
-    const slug = animeData.slug;
-    const idAnime = animeData.id;
+  const response2 = await fetchv2(url);
+  const json2 = JSON.parse(await response2.text());
 
-    const episodesJson = videoPlayerMatch[2].replace(/&quot;/g, '"');
-    const episodesData = JSON.parse(episodesJson);
+  const results =
+    json.episodes.map((e) => ({
+      href: `https://www.animeunity.so/anime/${json2.id}-${json2.slug}/${e.id}`,
+      number: e.number,
+    })) || [];
 
-    episodesData.forEach(episode => {
-        episodes.push({
-            href: `https://animeunity.so/anime/${idAnime}-${slug}/${episode.id}`,
-            number: episode.number
-        });
-    });
-
-    return episodes;
+  return JSON.stringify(results);
 }
 
-async function extractStreamUrl(html) {
-    try {
-        const vixcloudMatch = html.match(/embed_url="(https:\/\/vixcloud\.co\/embed\/\d+\?[^"]+)"/);
-        if (!vixcloudMatch) {
-            console.log('No vixcloud.co URL found in the HTML.');
-            return null;
-        }
+async function extractStreamUrl(url) {
+  const response = await fetchv2(url);
+  const html = await response.text();
 
-        let vixcloudUrl = vixcloudMatch[1];
-        vixcloudUrl = vixcloudUrl.replace(/&amp;/g, '&');
+  const regex = /<video-player[^>]*embed_url="([^"]+)"/;
+  const match = regex.exec(html);
+  const embedUrl = match ? match[1].replaceAll(`&amp;`, "&") : "";
 
-        const response = await fetch(vixcloudUrl);
-        const downloadUrlMatch = response.match(/window\.downloadUrl\s*=\s*['"]([^'"]+)['"]/);
-        
-        if (!downloadUrlMatch) {
-            console.log('No downloadUrl found in the response.');
-            return null;
-        }
+  if (embedUrl) {
+    const response = await fetchv2(embedUrl);
+    const html = await response.text();
 
-        const downloadURL = downloadUrlMatch[1];
-        console.log(downloadURL);
-        return downloadURL;
-    } catch (error) {
-        console.log('Fetch error:', error);
-        return null;
-    }
+    const scriptRegex =
+      /<script[^>]*>([\s\S]*?window\.video[\s\S]*?)<\/script>/;
+    const scriptMatch = scriptRegex.exec(html);
+    const scriptContent = scriptMatch ? scriptMatch[1] : "";
+
+    const domain = /url: '([^']+)'/.exec(scriptContent)[1];
+    const token = /token': '([^']+)'/.exec(scriptContent)[1];
+    const expires = /expires': '([^']+)'/.exec(scriptContent)[1];
+
+    let streamUrl = new URL(domain);
+
+    streamUrl.searchParams.append("token", token);
+    streamUrl.searchParams.append("referer", "");
+    streamUrl.searchParams.append("expires", expires);
+    streamUrl.searchParams.append("h", "1");
+
+    return streamUrl.href;
+  }
+
+  return null;
 }
