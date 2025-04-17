@@ -68,7 +68,7 @@ async function extractEpisodes(id) {
     if (paheProvider && paheProvider.episodes) {
         paheProvider.episodes.forEach(episode => {
             results.push({
-                href: `${id}/${episode.id}/${episode.number}`, 
+                href: `${id}/${episode.number}/${episode.id}`, 
                 number: episode.number
             });
         });
@@ -84,13 +84,11 @@ async function extractStreamUrl2(url) {
     console.error(`ID: ${id}, Number: ${number}, Episode ID: ${episodeId}`);
 
     const headers = {
-        headers: {
-            'Referer': 'https://gojo.wtf/',
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-        },
+        'Referer': 'https://gojo.wtf/',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     };
 
-    const response = await fetch(`https://backend.gojo.wtf/api/anime/tiddies?provider=pahe&id=${id}&num=${number}&subType=sub&watchId=${episodeId}&dub_id=null`, headers);
+    const response = await fetchv2(`https://backend.gojo.wtf/api/anime/tiddies?provider=pahe&id=${id}&num=${number}&subType=sub&watchId=${episodeId}&dub_id=null`, headers);
     const json = await response.json();
 
     let streams = [];
