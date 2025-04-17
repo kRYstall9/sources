@@ -68,16 +68,41 @@ async function extractEpisodes(id) {
     const strixProvider = json.find(provider => provider.providerId === "strix");
 
     if (paheProvider && paheProvider.episodes || zazaProvider && zazaProvider.episodes || strixProvider && strixProvider.episodes) {
+        let paheEpisodes = [];
+        let zazaEpisodes = [];
+        let strixEpisodes = [];
+
         paheProvider.episodes.forEach(episode => {
-            zazaProvider.episodes.forEach(episode2 => {
-                strixProvider.episodes.forEach(episode3 => {
-                    results.push({
-                        href: `${id}/pahe/${episode.number}/${episode.id}/zaza/${episode2.number}/${episode2.id}/strix/${episode3.number}/${episode3.id}`, 
-                        number: episode.number
-                    });
-                });
+            paheEpisodes.push({
+                number: episode.number,
+                id: episode.id
             });
         });
+
+        zazaProvider.episodes.forEach(episode => {
+            zazaEpisodes.push({
+                number: episode.number,
+                id: episode.id
+            });
+        });
+
+        strixProvider.episodes.forEach(episode => {
+            strixEpisodes.push({
+                number: episode.number,
+                id: episode.id
+            });
+        });
+
+        console.log(paheEpisodes);
+        console.log(zazaEpisodes);
+        console.log(strixEpisodes);
+
+        for (let i = 0; i < paheEpisodes.length; i++) {
+            results.push({
+                href: `${id}/pahe/${paheEpisodes[i].number}/${paheEpisodes[i].id}/zaza/${zazaEpisodes[i].number}/${zazaEpisodes[i].id}/strix/${strixEpisodes[i].number}/${strixEpisodes[i].id}`, 
+                number: paheEpisodes.number
+            });
+        }
     }
 
     console.error(JSON.stringify(results));
