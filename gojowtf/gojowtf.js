@@ -100,7 +100,7 @@ async function extractEpisodes(id) {
         for (let i = 0; i < paheEpisodes.length; i++) {
             results.push({
                 href: `${id}/pahe/${paheEpisodes[i].number}/${paheEpisodes[i].id}/zaza/${zazaEpisodes[i].number}/${zazaEpisodes[i].id}/strix/${strixEpisodes[i].number}/${strixEpisodes[i].id}`, 
-                number: paheEpisodes.number
+                number: paheEpisodes[i].number
             });
         }
     }
