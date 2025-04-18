@@ -67,31 +67,42 @@ async function extractEpisodes(id) {
     const zazaProvider = json.find(provider => provider.providerId === "zaza");
     const strixProvider = json.find(provider => provider.providerId === "strix");
 
-    if (paheProvider && paheProvider.episodes) {
+    if (paheProvider && paheProvider.episodes || zazaProvider && zazaProvider.episodes || strixProvider && strixProvider.episodes) {
+        let paheEpisodes = [];
+        let zazaEpisodes = [];
+        let strixEpisodes = [];
+
         paheProvider.episodes.forEach(episode => {
-            results.push({
-                href: `${id}/${episode.number}/${episode.id}/pahe`, 
-                number: episode.number
+            paheEpisodes.push({
+                number: episode.number,
+                id: episode.id
             });
         });
-    }
 
-    if (zazaProvider && zazaProvider.episodes) {
         zazaProvider.episodes.forEach(episode => {
-            results.push({
-                href: `${id}/${episode.number}/${episode.id}/zaza`, 
-                number: episode.number
+            zazaEpisodes.push({
+                number: episode.number,
+                id: episode.id
             });
         });
-    }
 
-    if (strixProvider && strixProvider.episodes) {
         strixProvider.episodes.forEach(episode => {
-            results.push({
-                href: `${id}/${episode.number}/${episode.id}/strix`, 
-                number: episode.number
+            strixEpisodes.push({
+                number: episode.number,
+                id: episode.id
             });
         });
+
+        console.log(paheEpisodes);
+        console.log(zazaEpisodes);
+        console.log(strixEpisodes);
+
+        for (let i = 0; i < paheEpisodes.length; i++) {
+            results.push({
+                href: `${id}/pahe/${paheEpisodes[i].number}/${paheEpisodes[i].id}/zaza/${zazaEpisodes[i].number}/${zazaEpisodes[i].id}/strix/${strixEpisodes[i].number}/${strixEpisodes[i].id}`, 
+                number: paheEpisodes[i].number
+            });
+        }
     }
 
     console.error(JSON.stringify(results));
@@ -99,26 +110,54 @@ async function extractEpisodes(id) {
 }
 
 async function extractStreamUrl(url) {
-    const [id, number, episodeId, provider] = url.split('/');  
+    const [id, provider, number, episodeId, provider2, number2, episodeId2, provider3, number3, episodeId3] = url.split('/');  
     
-    console.error(`ID: ${id}, Number: ${number}, Episode ID: ${episodeId}, Provider: ${provider}`);
+    console.error(`ID: ${id}, Provider: ${provider}, Number: ${number}, Episode ID: ${episodeId}, Provider2: ${provider2}, Number2: ${number2}, Episode ID2: ${episodeId2}, Provider3: ${provider3}, Number3: ${number3}, Episode ID3: ${episodeId3}`);
 
     const headers = {
         'Referer': 'https://gojo.wtf/',
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
     };
 
-    const response = await fetchv2(`https://backend.gojo.wtf/api/anime/tiddies?provider=pahe&id=${id}&num=${number}&subType=sub&watchId=${episodeId}&dub_id=null`, headers);
-    const json = await response.json();
-
     let streams = [];
 
-    const quality = json.sources.map(stream => stream.quality);
-    const stream = json.sources.map(stream => stream.url);
+    if (!provider || provider !== "") {
+        const response = await fetchv2(`https://backend.gojo.wtf/api/anime/tiddies?provider=${provider}&id=${id}&num=${number}&subType=sub&watchId=${episodeId}&dub_id=null`, headers);
+        const json = await response.json();
+    
+        const quality = json.sources.map(stream => stream.quality);
+        const stream = json.sources.map(stream => stream.url);
 
-    for (let i = 0; i < stream.length; i++) {
-        streams.push(`${provider} - ${quality[i]}`);
-        streams.push(stream[i]);
+        for (let i = 0; i < stream.length; i++) {
+            streams.push(`${provider} - ${quality[i]}`);
+            streams.push(stream[i]);
+        }
+    }
+
+    if (!provider2 || provider2 !== "") {
+        const response = await fetchv2(`https://backend.gojo.wtf/api/anime/tiddies?provider=${provider2}&id=${id}&num=${number2}&subType=sub&watchId=${episodeId2}&dub_id=null`, headers);
+        const json = await response.json();
+    
+        const quality = json.sources.map(stream => stream.quality);
+        const stream = json.sources.map(stream => stream.url);
+
+        for (let i = 0; i < stream.length; i++) {
+            streams.push(`${provider2} - ${quality[i]}`);
+            streams.push(stream[i]);
+        }
+    }
+
+    if (!provider3 || provider3 !== "") {
+        const response = await fetchv2(`https://backend.gojo.wtf/api/anime/tiddies?provider=${provider3}&id=${id}&num=${number3}&subType=sub&watchId=${episodeId3}&dub_id=null`, headers);
+        const json = await response.json();
+    
+        const quality = json.sources.map(stream => stream.quality);
+        const stream = json.sources.map(stream => stream.url);
+
+        for (let i = 0; i < stream.length; i++) {
+            streams.push(`${provider3} - ${quality[i]}`);
+            streams.push(stream[i]);
+        }
     }
 
     const result = {
