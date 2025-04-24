@@ -61,6 +61,10 @@ function extractDetails(html) {
     });
   }
 
+  console.log(details);
+  return details;
+}
+
 function extractEpisodes(html) {
     const episodes = [];
     const htmlRegex = /<a\s+[^>]*href="([^"]*?\/episode\/[^"]*?)"[^>]*>[\s\S]*?الحلقة\s+(\d+)[\s\S]*?<\/a>/gi;
