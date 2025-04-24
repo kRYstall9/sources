@@ -1,24 +1,23 @@
 function searchResults(html) {
     const results = [];
 
-    
     const titleRegex = /<h2[^>]*>(.*?)<\/h2>/;
     const hrefRegex = /<a\s+href="([^"]+)"\s*[^>]*>/;
     const imgRegex = /<img[^>]*src="([^"]+)"[^>]*>/;
-    
+
     const itemRegex = /<div class="my-2 w-64[^"]*"[^>]*>[\s\S]*?<\/div>\s*<\/div>\s*<\/div>/g;
     const items = html.match(itemRegex) || [];
-    
+
     items.forEach((itemHtml) => {
        const titleMatch = itemHtml.match(titleRegex);
-       const title = titleMatch ? titleMatch[1].trim() : '';
-       
+       const title = titleMatch ? decodeHTMLEntities(titleMatch[1].trim()) : '';
+
        const hrefMatch = itemHtml.match(hrefRegex);
        const href = hrefMatch ? hrefMatch[1].trim() : '';
-       
+
        const imgMatch = itemHtml.match(imgRegex);
        const imageUrl = imgMatch ? imgMatch[1].trim() : '';
-       
+
        if (title && href) {
            results.push({
                title: title,
@@ -36,7 +35,7 @@ function extractDetails(html) {
   const descriptionMatch = html.match(
     /<p class="sm:text-\[1\.05rem\] leading-loose text-justify">([\s\S]*?)<\/p>/
   );
-  let description = descriptionMatch ? descriptionMatch[1].trim() : "";
+  let description = descriptionMatch ? decodeHTMLEntities(descriptionMatch[1].trim()) : "";
 
   const airdateMatch = html.match(/<td[^>]*title="([^"]+)">[^<]+<\/td>/);
   let airdate = airdateMatch ? airdateMatch[1].trim() : "";
@@ -116,4 +115,22 @@ async function extractStreamUrl(html) {
     } catch (error) {
         return null;
     }
+}
+
+function decodeHTMLEntities(text) {
+    text = text.replace(/&#(\d+);/g, (match, dec) => String.fromCharCode(dec));
+
+    const entities = {
+        '&quot;': '"',
+        '&amp;': '&',
+        '&apos;': "'",
+        '&lt;': '<',
+        '&gt;': '>'
+    };
+
+    for (const entity in entities) {
+        text = text.replace(new RegExp(entity, 'g'), entities[entity]);
+    }
+
+    return text;
 }
