@@ -106,24 +106,25 @@ async function extractStreamUrl(url) {
 
         let firstVideo = null;
 
-        const voeGermanSub = finishedList.find(video => video.provider === 'VOE' && video.language === 'mit Untertitel Deutsch');
-        if (voeGermanSub) {
-            firstVideo = voeGermanSub;
-        }
-        else {
-            const voeEnglishSub = finishedList.find(video => video.provider === 'VOE' && video.language === 'mit Untertitel Englisch');
-            if (voeEnglishSub) {
-                firstVideo = voeEnglishSub;
+        
+            const voeGerSub = finishedList.find(video => video.provider === 'VOE' && video.language === 'mit Untertitel Deutsch');
+            if (voeGerSub) {
+                firstVideo = voeGerSub;
+            } else {
+                const voeGermanDub = finishedList.find(video => video.provider === 'VOE' && video.language === 'Deutsch');
+                if (voeGermanDub) {
+                    firstVideo = voeGermanDub;
+                } else {
+                    firstVideo = finishedList[0];
+                }
             }
-            else {
-                firstVideo = finishedList[0];
-            }
-        }
+        
 
 
         const videoPage = await fetch(firstVideo.href);
 
-        // Extract the link from window.location.href in the script tag
+        
+// Extract the link from window.location.href in the script tag
 const scriptRegex = /window\.location\.href\s*=\s*['"]([^'"]+)['"]/;
 const scriptMatch = scriptRegex.exec(videoPage);
 const winLocUrl = scriptMatch ? scriptMatch[1] : '';
@@ -388,3 +389,4 @@ function base64Decode(str) {
 
     return output;
 }
+
