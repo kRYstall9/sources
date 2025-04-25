@@ -117,7 +117,8 @@ async function extractStreamUrl(url) {
 
         const videoPage = await fetch(firstVideo.href);
 
-        // Extract the link from window.location.href in the script tag
+        
+// Extract the link from window.location.href in the script tag
 const scriptRegex = /window\.location\.href\s*=\s*['"]([^'"]+)['"]/;
 const scriptMatch = scriptRegex.exec(videoPage);
 const winLocUrl = scriptMatch ? scriptMatch[1] : '';
