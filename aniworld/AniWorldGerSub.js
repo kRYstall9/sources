@@ -106,51 +106,175 @@ async function extractStreamUrl(url) {
 
         let firstVideo = null;
 
-        const voeGermanSub = finishedList.find(video => video.provider === 'VOE' && video.language === 'mit Untertitel Deutsch');
-        if (voeGermanSub) {
-            firstVideo = voeGermanSub;
-        }
-        else {
-            const voeEnglishSub = finishedList.find(video => video.provider === 'VOE' && video.language === 'mit Untertitel Englisch');
-            if (voeEnglishSub) {
-                firstVideo = voeEnglishSub;
+        
+            const voeGerSub = finishedList.find(video => video.provider === 'VOE' && video.language === 'mit Untertitel Deutsch');
+            if (voeGerSub) {
+                firstVideo = voeGerSub;
+            } else {
+                const voeGermanDub = finishedList.find(video => video.provider === 'VOE' && video.language === 'Deutsch');
+                if (voeGermanDub) {
+                    firstVideo = voeGermanDub;
+                } else {
+                    firstVideo = finishedList[0];
+                }
             }
-            else {
-                firstVideo = finishedList[0];
-            }
-        }
+        
 
 
         const videoPage = await fetch(firstVideo.href);
 
-        // Extract the link from window.location.href in the script tag
-        const scriptRegex = /window\.location\.href\s*=\s*['"]([^'"]+)['"]/;
-        const scriptMatch = scriptRegex.exec(videoPage);
-        const winLocUrl = scriptMatch ? scriptMatch[1] : '';
+        
+// Extract the link from window.location.href in the script tag
+const scriptRegex = /window\.location\.href\s*=\s*['"]([^'"]+)['"]/;
+const scriptMatch = scriptRegex.exec(videoPage);
+const winLocUrl = scriptMatch ? scriptMatch[1] : '';
 
-        const hlsSourceUrl = await fetch(winLocUrl);
+const hlsSourceResponse = await fetch(winLocUrl);
+const hlsSourcePage = typeof hlsSourceResponse === 'object' ? await hlsSourceResponse.text() : await hlsSourceResponse;
 
-        // Extract the sources variable and decode the hls value from base64
-        const sourcesRegex = /var\s+sources\s*=\s*({[^}]+})/;
-        const sourcesMatch = sourcesRegex.exec(hlsSourceUrl);
-        let sourcesString = sourcesMatch ? sourcesMatch[1].replace(/'/g, '"') : null;
+// VOE Extractor goes here, or wherever you want really
+if(firstVideo.provider === 'VOE') {
+    const voeJson = voeExtractor(hlsSourcePage);
+    return voeJson.source;
+}
+// END OF VOE EXTRACTOR
 
-        // Remove trailing commas
-        sourcesString = sourcesString ? sourcesString.replace(/,\s*}/g, '}').replace(/,\s*]/g, ']') : null;
+// Extract the sources variable and decode the hls value from base64
+const sourcesRegex = /var\s+sources\s*=\s*({[^}]+})/;
+const sourcesMatch = sourcesRegex.exec(hlsSourcePage);
+let sourcesString = sourcesMatch ? sourcesMatch[1].replace(/'/g, '"') : null;
 
-        const sources = sourcesString ? JSON.parse(sourcesString) : null;
-        if (sources && sources.hls) {
-            const hlsBase64 = sources.hls;
-            const hlsDecoded = base64Decode(hlsBase64);
-            console.log('HLS Decoded:' + hlsDecoded);
-            return hlsDecoded;
-        }
+return sourcesString;
 
-        return firstVideo.href;
+        
     } catch (error) {
         console.log('ExtractStreamUrl error:' + error);
         return JSON.stringify([{ provider: 'Error1', link: '' }]);
     }
+}
+
+
+
+// Thank to https://github.com/ShadeOfChaos 
+
+/**
+ * Extracts a JSON object from the given source page by finding the
+ * encoded string marked with the regex /MKGMa="([\s\S]+?)"/ and
+ * decoding it using the voeDecoder function.
+ * @param {string} sourcePageHtml - The source page to be parsed.
+ * @returns {object|null} The extracted JSON object if successful,
+ *   otherwise null.
+ */
+function voeExtractor(sourcePageHtml) {
+    const REGEX = /MKGMa="([\s\S]+?)"/;
+
+    const match = sourcePageHtml.match(REGEX);
+    if(match == null || match[1] == null) {
+        console.log('Could not extract from Voe source');
+        return null;
+    }
+
+    const encodedString = match[1];
+    const decodedJson = voeDecoder(encodedString);
+    
+    return decodedJson;
+}
+
+/**
+ * Decodes the given MKGMa string, which is a custom encoded string used
+ * by VOE. This function applies the following steps to the input string to
+ * decode it:
+ * 1. Apply ROT13 to each alphabetical character in the string.
+ * 2. Remove all underscores from the string.
+ * 3. Decode the string using the Base64 algorithm.
+ * 4. Apply a character shift of 0x3 to each character in the decoded string.
+ * 5. Reverse the order of the characters in the shifted string.
+ * 6. Decode the reversed string using the Base64 algorithm again.
+ * 7. Parse the decoded string as JSON.
+ * @param {string} MKGMa_String - The input string to be decoded.
+ * @returns {object} The decoded JSON object.
+ */
+function voeDecoder(MKGMa_String) {
+    let ROT13String = ROT13(MKGMa_String);
+    let sanitizedString = voeSanitizer(ROT13String);
+    let UnderscoreRemoved = sanitizedString.split('_').join('');
+    let base64DecodedString = atob(UnderscoreRemoved);
+    let charShiftedString = shiftCharacter(base64DecodedString, 0x3);
+    let reversedString = charShiftedString.split('').reverse().join('');
+    let base64DecodedStringAgain = atob(reversedString);
+    let decodedJson;
+    try {
+        decodedJson = JSON.parse(base64DecodedStringAgain);
+    } catch (error) {
+        console.log("JSON parse error:", error);
+        decodedJson = {};
+    }
+    return decodedJson;
+}
+
+/**
+ * Encodes a given string using the ROT13 cipher, which shifts each letter
+ * 13 places forward in the alphabet. Only alphabetical characters are 
+ * transformed; other characters remain unchanged.
+ * 
+ * @param {string} string - The input string to be encoded.
+ * @returns {string} The encoded string with ROT13 applied.
+ */
+function ROT13(string) {
+    let ROT13String = '';
+
+    for (let i=0; i < string.length; i++) {
+        let currentCharCode = string.charCodeAt(i);
+
+        // Check for uppercase
+        if (currentCharCode >= 65 && currentCharCode <= 90) {
+            currentCharCode = (currentCharCode - 65 + 13) % 26 + 65;
+        // Check for lowercase
+        } else if (currentCharCode >= 97 && currentCharCode <= 122) {
+            currentCharCode = (currentCharCode - 97 + 13) % 26 + 97;
+        }
+
+        ROT13String += String.fromCharCode(currentCharCode);
+    }
+
+    return ROT13String;
+}
+
+/**
+ * Sanitizes a given string by replacing all occurrences of certain "trash" strings
+ * with an underscore. The trash strings are '@$', '^^', '~@', '%?', '*~', '!!', '#&'.
+ * This is used to decode VOE encoded strings.
+ * @param {string} string The string to be sanitized.
+ * @returns {string} The sanitized string.
+ */
+function voeSanitizer(string) {
+    let sanitizationArray = ['@$', '^^', '~@', '%?', '*~', '!!', '#&'];
+    let tempString = string;
+
+    for (let i=0; i < sanitizationArray.length; i++) {
+        let currentTrash = sanitizationArray[i];
+        let sanitizedString = new RegExp(currentTrash.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), 'g');
+
+        tempString = tempString.replace(sanitizedString, '_');
+    }
+
+    return tempString;
+}
+
+/**
+ * Shifts the characters in a string by a given number of places.
+ * @param {string} string - The string to shift.
+ * @param {number} shiftNum - The number of places to shift the string.
+ * @returns {string} The shifted string.
+ */
+function shiftCharacter(string, shiftNum) {
+    let tempArray = [];
+
+    for (let i=0; i < string.length; i++) {
+        tempArray.push(String.fromCharCode(string.charCodeAt(i) - shiftNum));
+    }
+    
+    return tempArray.join('');
 }
 
 
@@ -265,3 +389,4 @@ function base64Decode(str) {
 
     return output;
 }
+
