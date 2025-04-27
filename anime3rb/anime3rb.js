@@ -128,7 +128,7 @@ async function extractStreamUrl(html) {
     
         console.log('Full embed URL:', embedUrl);
     
-        const response = await fetch(embedUrl);
+        const response = await fetchv2(embedUrl);
         const data = await response.text();
         console.log('Embed page HTML:', data);
 
