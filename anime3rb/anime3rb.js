@@ -33,7 +33,7 @@ function extractDetails(html) {
   const details = [];
 
   const descriptionMatch = html.match(
-    /<p class="sm:text-\[1\.04rem\] leading-loose text-justify">([\s\S]*?)<\/p>/
+    /<p class="sm:text-\[1\.04rem\] leading-loose text-justify">([\s\S]*?)<\/p>/g
   );
   let description = descriptionMatch ? decodeHTMLEntities(descriptionMatch[1].trim()) : "";
 
@@ -42,7 +42,7 @@ function extractDetails(html) {
 
   const genres = [];
   const aliasesMatch = html.match(
-    /<div\s+class="flex flex-wrap gap-2 lg:gap-4 text-sm sm:text-\[\.93rem\] -mt-2 mb-4">([\s\S]*?)<\/div>/
+    /<div\s+class="flex flex-wrap gap-2 lg:gap-4 text-sm sm:text-\[\.94rem\] -mt-2 mb-4">([\s\S]*?)<\/div>/
   );
   const inner = aliasesMatch ? aliasesMatch[1] : "";
 
