@@ -33,7 +33,7 @@ function extractDetails(html) {
   const details = [];
 
   const descriptionMatch = html.match(
-    /<p class="sm:text-\[1\.04rem\] leading-loose text-justify">([\s\S]*?)<\/p>/g
+    <div class="py-4 flex flex-col gap-2">\s*((?:<p class="sm:text-\[1\.04rem\] leading-loose text-justify">[\s\S]*?<\/p>\s*)+)<\/div>
   );
   let description = descriptionMatch ? decodeHTMLEntities(descriptionMatch[1].trim()) : "";
 
