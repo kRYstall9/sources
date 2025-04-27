@@ -32,17 +32,26 @@ function searchResults(html) {
 function extractDetails(html) {
   const details = [];
 
-  const descriptionMatch = html.match(
-    /<p class="sm:text-\[1\.05rem\] leading-loose text-justify">([\s\S]*?)<\/p>/
-  );
-  let description = descriptionMatch ? decodeHTMLEntities(descriptionMatch[1].trim()) : "";
+  const containerMatch = html.match(/<div class="py-4 flex flex-col gap-2">\s*((?:<p class="sm:text-\[1\.04rem\] leading-loose text-justify">[\s\S]*?<\/p>\s*)+)<\/div>/);
+
+  let description = "";
+  if (containerMatch) {
+    const pBlock = containerMatch[1];
+
+    const pRegex = /<p class="sm:text-\[1\.04rem\] leading-loose text-justify">([\s\S]*?)<\/p>/g;
+    const matches = [...pBlock.matchAll(pRegex)]
+      .map(m => m[1].trim())
+      .filter(text => text.length > 0); 
+
+    description = decodeHTMLEntities(matches.join("\n\n")); 
+  }
 
   const airdateMatch = html.match(/<td[^>]*title="([^"]+)">[^<]+<\/td>/);
   let airdate = airdateMatch ? airdateMatch[1].trim() : "";
 
   const genres = [];
   const aliasesMatch = html.match(
-    /<div\s+class="flex flex-wrap gap-2 lg:gap-4 text-sm sm:text-\[\.93rem\] -mt-2 mb-4">([\s\S]*?)<\/div>/
+    /<div\s+class="flex flex-wrap gap-2 lg:gap-4 text-sm sm:text-\[\.94rem\] -mt-2 mb-4">([\s\S]*?)<\/div>/
   );
   const inner = aliasesMatch ? aliasesMatch[1] : "";
 
@@ -63,6 +72,7 @@ function extractDetails(html) {
   console.log(details);
   return details;
 }
+
 
 function extractEpisodes(html) {
     const episodes = [];
