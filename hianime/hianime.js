@@ -4,6 +4,8 @@ async function searchResults(keyword) {
         const responseText = await fetchv2(`https://bshar1865-hianime.vercel.app/api/v2/hianime/search?q=${encodedKeyword}`);
         const data = await responseText.json();
 
+        console.log("Search results:", data);
+
         const transformedResults = data.data.animes.map(anime => ({
             title: anime.name,
             image: anime.poster,
@@ -39,9 +41,9 @@ async function extractDetails(url) {
     } catch (error) {
         console.log('Details error:', error);
         return JSON.stringify([{
-        description: 'Error loading description',
-        aliases: 'Duration: Unknown',
-        airdate: 'Aired: Unknown'
+            description: 'Error loading description',
+            aliases: 'Duration: Unknown',
+            airdate: 'Aired: Unknown'
         }]);
   }
 }
@@ -127,3 +129,5 @@ async function extractStreamUrl(url) {
         });
     }
 }
+
+searchResults("Naruto");
