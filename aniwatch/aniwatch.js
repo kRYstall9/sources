@@ -4,11 +4,13 @@ async function searchResults(keyword) {
         const responseText = await fetch(`https://aniwatch-api-one-rosy.vercel.app/aniwatch/search?keyword=${encodedKeyword}`);
         const data = JSON.parse(responseText);
         
-        const transformedResults = data.animes.map(anime => ({
-            title: anime.name,
-            image: anime.img,
-            href: `https://aniwatchtv.to/${anime.id}`
-        }));
+        const transformedResults = data.animes
+            .filter(anime => anime.episodes && anime.episodes.dub !== null)
+            .map(anime => ({
+                title: anime.name,
+                image: anime.img,
+                href: `https://aniwatchtv.to/${anime.id}`
+            }));
         
         return JSON.stringify(transformedResults);
         
