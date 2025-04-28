@@ -166,8 +166,8 @@ async function extractStreamUrl(html) {
             streams: qualities,
         }
     
-        console.log('Final embed URL with all params:', qualities);
-        return result;
+        console.log(JSON.stringify(result));
+        return JSON.stringify(result);
     } catch (err) {
         console.error(err);
         return null;
