@@ -86,6 +86,7 @@ async function extractStreamUrl(url) {
             if (dubData.data && dubData.data.sources && dubData.data.sources.length > 0) {
                 const dubSource = dubData.data.sources.find(source => source.type === 'hls');
                 if (dubSource && dubSource.url) {
+                    streams.push("DUB");
                     streams.push(dubSource.url);
                 }
             }
@@ -100,6 +101,7 @@ async function extractStreamUrl(url) {
             if (subData.data && subData.data.sources && subData.data.sources.length > 0) {
                 const subSource = subData.data.sources.find(source => source.type === 'hls');
                 if (subSource && subSource.url) {
+                    streams.push("SUB");
                     streams.push(subSource.url);
                 }
                 
@@ -129,5 +131,3 @@ async function extractStreamUrl(url) {
         });
     }
 }
-
-searchResults("Naruto");
