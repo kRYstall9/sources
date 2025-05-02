@@ -103,40 +103,90 @@ async function extractStreamUrl(url) {
                 finishedList.push({ provider: videoLink.provider, href: `${baseUrl}${videoLink.href}`, language: language.title });
             }
         }
-
-        let firstVideo = null;
-
         
-            const voeGerSub = finishedList.find(video => video.provider === 'VOE' && video.language === 'mit Untertitel Deutsch');
-            if (voeGerSub) {
-                firstVideo = voeGerSub;
-            } else {
-                const voeGermanDub = finishedList.find(video => video.provider === 'VOE' && video.language === 'Deutsch');
-                if (voeGermanDub) {
-                    firstVideo = voeGermanDub;
-                } else {
-                    firstVideo = finishedList[0];
-                }
+            let firstVideo = null;
+            let provider = null;
+            const sfGermanDub = finishedList.find(
+              (video) => video.provider === "SpeedFiles" && video.language === "mit Untertitel Deutsch"
+            );
+        
+            if (sfGermanDub && provider === null) {
+              provider = "SpeedFiles";
+              firstVideo = sfGermanDub;
+            } else if (provider === null) {
+              const sfGerSub = finishedList.find(
+                (video) =>
+                  video.provider === "SpeedFiles" &&
+                  video.language === "Untertitel"
+              );
+              if (sfGerSub) {
+                firstVideo = sfGerSub;
+                provider = "SpeedFiles";
+              } else {
+                firstVideo = finishedList[0];
+              }
             }
         
-
-
-        const videoPage = await fetch(firstVideo.href);
-
+            // VOE NOT WORKING
         
-// Extract the link from window.location.href in the script tag
-const scriptRegex = /window\.location\.href\s*=\s*['"]([^'"]+)['"]/;
-const scriptMatch = scriptRegex.exec(videoPage);
-const winLocUrl = scriptMatch ? scriptMatch[1] : '';
-
-const hlsSourceResponse = await fetch(winLocUrl);
-const hlsSourcePage = typeof hlsSourceResponse === 'object' ? await hlsSourceResponse.text() : await hlsSourceResponse;
-
-// VOE Extractor goes here, or wherever you want really
-if(firstVideo.provider === 'VOE') {
-    const voeJson = voeExtractor(hlsSourcePage);
-    return voeJson.source;
-}
+            const voeGermanDub = finishedList.find(
+              (video) => video.provider === "VOE" && video.language === "mit Untertitel Deutsch"
+            );
+            if (voeGermanDub && provider === null) {
+              firstVideo = voeGermanDub;
+              provider = "VOE";
+            } else if (provider === null) {
+              const voeGerSub = finishedList.find(
+                (video) =>
+                  video.provider === "VOE" &&
+                  video.language === "Deutsch"
+              );
+              if (voeGerSub) {
+                firstVideo = voeGerSub;
+                provider = "VOE";
+              } else {
+                firstVideo = finishedList[0];
+              }
+            }
+        
+            const videoPage = await fetch(firstVideo.href);
+            console.log("Video Page: " + videoPage.status);
+        
+            const winLocRegex = /window\.location\.href\s*=\s*['"]([^'"]+)['"]/;
+            const winLocMatch = winLocRegex.exec(videoPage);
+            let winLocUrl = null;
+            if (!winLocMatch) {
+              winLocUrl = firstVideo.href;
+            } else {
+              winLocUrl = winLocMatch[1];
+            }
+        
+            const hlsSourceResponse = await fetch(winLocUrl);
+            const hlsSourcePage =
+              typeof hlsSourceResponse === "object"
+                ? await hlsSourceResponse.text()
+                : await hlsSourceResponse;
+            console.log("Provider: " + provider);
+            console.log("URL: " + winLocUrl);
+            // VOE Extractor goes here, or wherever you want really
+            if (provider === "VOE") {
+              const voeJson = voeExtractor(hlsSourcePage);
+              return voeJson.source;
+            } else if (provider === "SpeedFiles") {
+              let speedfilesUrl = null;
+              try {
+                speedfilesUrl = await speedfilesExtractor(hlsSourcePage);
+              } catch (error) {
+                console.log("Speedfiles extractor error:" + error);
+                return JSON.stringify([{ provider: "Error1", link: "" }]);
+              }
+              if (speedfilesUrl) {
+                return speedfilesUrl;
+              } else {
+                console.log("Speedfiles extractor failed");
+                return JSON.stringify([{ provider: "Error2", link: "" }]);
+              }
+            }
 // END OF VOE EXTRACTOR
 
 // Extract the sources variable and decode the hls value from base64
@@ -153,6 +203,79 @@ return sourcesString;
     }
 }
 
+
+// Thanks to Cufiy
+function speedfilesExtractor(sourcePageHtml) {
+    // get var _0x5opu234 = "THIS_IS_AN_ENCODED_STRING"
+    const REGEX = /var\s+_0x5opu234\s*=\s*"([^"]+)"/;
+    const match = sourcePageHtml.match(REGEX);
+    if (match == null || match[1] == null) {
+      console.log("Could not extract from Speedfiles source");
+      return null;
+    }
+  
+    const encodedString = match[1];
+    console.log("Encoded String:" + encodedString);
+  
+    // Step 1: Base64 decode the initial string
+    let step1 = atob(encodedString);
+    console.log("Step 1:" + step1);
+  
+    // Step 2: Swap character cases and reverse
+    let step2 = step1
+      .split("")
+      .map((c) =>
+        /[a-zA-Z]/.test(c)
+          ? c === c.toLowerCase()
+            ? c.toUpperCase()
+            : c.toLowerCase()
+          : c
+      )
+      .join("");
+    console.log("Step 2:" + step2);
+    let step3 = step2.split("").reverse().join("");
+    console.log("Step 3:" + step3);
+  
+    // Step 3: Base64 decode again and reverse
+    let step4 = atob(step3);
+    console.log("Step 4:" + step4);
+    let step5 = step4.split("").reverse().join("");
+    console.log("Step 5:" + step5);
+  
+    // Step 4: Hex decode pairs
+    let step6 = "";
+    for (let i = 0; i < step5.length; i += 2) {
+      step6 += String.fromCharCode(parseInt(step5.substr(i, 2), 16));
+    }
+    console.log("Step 6:" + step6);
+  
+    // Step 5: Subtract 3 from character codes
+    let step7 = step6
+      .split("")
+      .map((c) => String.fromCharCode(c.charCodeAt(0) - 3))
+      .join("");
+    console.log("Step 7:" + step7);
+  
+    // Step 6: Final case swap, reverse, and Base64 decode
+    let step8 = step7
+      .split("")
+      .map((c) =>
+        /[a-zA-Z]/.test(c)
+          ? c === c.toLowerCase()
+            ? c.toUpperCase()
+            : c.toLowerCase()
+          : c
+      )
+      .join("");
+    console.log("Step 8:" + step8);
+    let step9 = step8.split("").reverse().join("");
+    console.log("Step 9:" + step9);
+  
+    // return atob(step9);
+    let decodedUrl = atob(step9);
+    console.log("Decoded URL:" + decodedUrl);
+    return decodedUrl;
+  }
 
 
 // Thank to https://github.com/ShadeOfChaos 
