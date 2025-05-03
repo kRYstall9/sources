@@ -90,5 +90,3 @@ async function extractStreamUrl(url) {
     console.error(m3u8Match ? m3u8Match[1] : null);
     return m3u8Match ? m3u8Match[1] : null;
 }
-
-

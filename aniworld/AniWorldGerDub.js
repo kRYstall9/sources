@@ -114,59 +114,25 @@ async function extractStreamUrl(url) {
       }
     }
 
-    let firstVideo = null;
-    let provider = null;
-    const sfGermanDub = finishedList.find(
-      (video) => video.provider === "SpeedFiles" && video.language === "Deutsch"
-    );
-
-    if (sfGermanDub && provider === null) {
-      provider = "SpeedFiles";
-      firstVideo = sfGermanDub;
-    } else if (provider === null) {
-      const sfGerSub = finishedList.find(
-        (video) =>
-          video.provider === "SpeedFiles" &&
-          video.language === "mit Untertitel Deutsch"
-      );
-      if (sfGerSub) {
-        firstVideo = sfGerSub;
-        provider = "SpeedFiles";
-      } else {
-        firstVideo = finishedList[0];
-      }
+    // Select the hoster
+    const selectedHoster = selectHoster(finishedList);
+    const provider = selectedHoster.provider;
+    const providerLink = selectedHoster.href;
+    if (provider === "Error") {
+      console.log("No video found");
+      return JSON.stringify([{ provider: "Error", link: "" }]);
     }
+    console.log("Selected provider: " + provider);
+    console.log("Selected link: " + providerLink);
 
-    // VOE NOT WORKING
-
-    const voeGermanDub = finishedList.find(
-      (video) => video.provider === "VOE" && video.language === "Deutsch"
-    );
-    if (voeGermanDub && provider === null) {
-      firstVideo = voeGermanDub;
-      provider = "VOE";
-    } else if (provider === null) {
-      const voeGerSub = finishedList.find(
-        (video) =>
-          video.provider === "VOE" &&
-          video.language === "mit Untertitel Deutsch"
-      );
-      if (voeGerSub) {
-        firstVideo = voeGerSub;
-        provider = "VOE";
-      } else {
-        firstVideo = finishedList[0];
-      }
-    }
-
-    const videoPage = await fetch(firstVideo.href);
-    console.log("Video Page: " + videoPage.status);
+    const videoPage = await fetch(providerLink);
+    console.log("Video Page: " + videoPage.length);
 
     const winLocRegex = /window\.location\.href\s*=\s*['"]([^'"]+)['"]/;
     const winLocMatch = winLocRegex.exec(videoPage);
     let winLocUrl = null;
     if (!winLocMatch) {
-      winLocUrl = firstVideo.href;
+      winLocUrl = providerLink;
     } else {
       winLocUrl = winLocMatch[1];
     }
@@ -178,24 +144,39 @@ async function extractStreamUrl(url) {
         : await hlsSourceResponse;
     console.log("Provider: " + provider);
     console.log("URL: " + winLocUrl);
-    // VOE Extractor goes here, or wherever you want really
-    if (provider === "VOE") {
-      const voeJson = voeExtractor(hlsSourcePage);
-      return voeJson.source;
-    } else if (provider === "SpeedFiles") {
-      let speedfilesUrl = null;
+    console.log("HLS Source Page: " + hlsSourcePage.length);
+    
+    switch (provider) {
+      case "VOE":
       try {
-        speedfilesUrl = await speedfilesExtractor(hlsSourcePage);
+        const voeJson = voeExtractor(hlsSourcePage);
+        return voeJson?.source || JSON.stringify([{ provider: "Error", link: "" }]);
       } catch (error) {
-        console.log("Speedfiles extractor error:" + error);
-        return JSON.stringify([{ provider: "Error1", link: "" }]);
+        console.log("VOE extractor error: " + error);
+        return JSON.stringify([{ provider: "Error", link: "" }]);
       }
-      if (speedfilesUrl) {
-        return speedfilesUrl;
-      } else {
-        console.log("Speedfiles extractor failed");
-        return JSON.stringify([{ provider: "Error2", link: "" }]);
+
+      case "SpeedFiles":
+      try {
+        const speedfilesUrl = await speedfilesExtractor(hlsSourcePage);
+        return speedfilesUrl || JSON.stringify([{ provider: "Error", link: "" }]);
+      } catch (error) {
+        console.log("Speedfiles extractor error: " + error);
+        return JSON.stringify([{ provider: "Error", link: "" }]);
       }
+
+      case "Vidmoly":
+      try {
+        const vidmolyUrl = vidmolyExtractor(hlsSourcePage);
+        return vidmolyUrl || JSON.stringify([{ provider: "Error", link: "" }]);
+      } catch (error) {
+        console.log("Vidmoly extractor error: " + error);
+        return JSON.stringify([{ provider: "Error", link: "" }]);
+      }
+
+      default:
+      console.log("Unsupported provider:", provider);
+      return JSON.stringify([{ provider: "Error", link: "" }]);
     }
     // END OF VOE EXTRACTOR
 
@@ -212,6 +193,91 @@ async function extractStreamUrl(url) {
     return JSON.stringify([{ provider: "Error1", link: "" }]);
   }
 }
+
+function selectHoster(finishedList) {
+  let firstVideo = null;
+  let provider = null;
+
+  // Define the preferred providers and languages
+  const providerList = ["Vidmoly", "SpeedFiles", "VOE"];
+  const languageList = ["Deutsch", "mit Untertitel Deutsch"];
+  
+
+  for (const providerName of providerList) {
+    for (const language of languageList) {
+      const video = finishedList.find(
+        (video) => video.provider === providerName && video.language === language
+      );
+      if (video) {
+        provider = providerName;
+        firstVideo = video;
+        break;
+      }
+    }
+    if (firstVideo) break;
+  }
+
+  // Default to the first video if no match is found
+  if (!firstVideo) {
+    firstVideo = finishedList[0];
+  }
+
+    if (firstVideo) {
+      return {
+        provider: provider,
+        href: firstVideo.href,
+      };
+    } else {
+      console.log("No video found");
+      return {
+        provider: "Error",
+        href: "https://error.org",
+      };
+    }
+}
+
+//Thanks to Ibro and Cufiy
+async function vidmolyExtractor(html) {
+  console.log("Vidmoly extractor");
+  console.log(html);
+    const regexSub = /<option value="([^"]+)"[^>]*>\s*SUB - Omega\s*<\/option>/;
+    const regexFallback = /<option value="([^"]+)"[^>]*>\s*Omega\s*<\/option>/;
+    const fallback = /<option value="([^"]+)"[^>]*>\s*SUB v2 - Omega\s*<\/option>/;
+
+
+    let match = html.match(regexSub) || html.match(regexFallback) || html.match(fallback);
+  if (match) {
+    console.log("Vidmoly extractor: Match found");
+    const decodedHtml = atob(match[1]); // Decode base64
+    const iframeMatch = decodedHtml.match(/<iframe\s+src="([^"]+)"/);
+
+    if (!iframeMatch) {
+        console.log("Vidmoly extractor: No iframe match found");
+        return null;
+    }
+
+    const streamUrl = iframeMatch[1].startsWith("//") ? "https:" + iframeMatch[1] : iframeMatch[1];
+    console.log("Vidmoly extractor: Stream URL: " + streamUrl);
+
+    const responseTwo = await fetchv2(streamUrl);
+    const htmlTwo = await responseTwo.text();
+
+    const m3u8Match = htmlTwo.match(/sources:\s*\[\{file:"([^"]+\.m3u8)"/);
+    console.log(m3u8Match ? m3u8Match[1] : null);
+    return m3u8Match ? m3u8Match[1] : null;
+  } else {
+    console.log("Vidmoly extractor: No match found, using fallback");
+  //  regex the sources: [{file:"this_is_the_link"}]
+    const sourcesRegex = /sources:\s*\[\{file:"(https?:\/\/[^"]+)"\}/;
+    const sourcesMatch = html.match(sourcesRegex);
+    let sourcesString = sourcesMatch
+      ? sourcesMatch[1].replace(/'/g, '"')
+      : null;
+
+    return sourcesString;
+  }
+}
+    
 
 // Thanks to Cufiy
 function speedfilesExtractor(sourcePageHtml) {
@@ -533,6 +599,7 @@ function base64Decode(str) {
   return output;
 }
 
+// Debugging function to send logs
 // async function sendLog(message) {
 //     // send http://192.168.2.130/sora-module/log.php?action=add&message=message
 //     console.log(message);
