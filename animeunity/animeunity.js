@@ -36,25 +36,31 @@ async function extractDetails(url) {
   ]);
 }
 
-async function extractEpisodes(url, page = 1) {
-  const episodesPerPage = 120;
-  const lastPageEpisode = page * episodesPerPage;
-  const firstPageEpisode = lastPageEpisode - (episodesPerPage - 1);
-  const uurl = `${url}/1?start_range=${firstPageEpisode}&end_range=${lastPageEpisode}`;
 
-  const response = await fetchv2(uurl);
-  const json = JSON.parse(await response.text());
-
-  const response2 = await fetchv2(url);
-  const json2 = JSON.parse(await response2.text());
-
-  const results =
-    json.episodes.map((e) => ({
-      href: `https://www.animeunity.so/anime/${json2.id}-${json2.slug}/${e.id}`,
-      number: e.number,
-    })) || [];
-
-  return JSON.stringify(results);
+function extractEpisodes(html) {
+    const episodes = [];
+    const videoPlayerRegex = /<video-player[^>]*anime="([^"]*)"[^>]*episodes="([^"]*)"/;
+    const videoPlayerMatch = html.match(videoPlayerRegex);
+      if (!videoPlayerMatch) {
+        return episodes;
+    }
+  
+    const animeJson = videoPlayerMatch[1].replace(/&quot;/g, '"');
+    const animeData = JSON.parse(animeJson);
+  
+    const slug = animeData.slug;
+    const idAnime = animeData.id;
+    const episodesJson = videoPlayerMatch[2].replace(/&quot;/g, '"');
+    const episodesData = JSON.parse(episodesJson);
+  
+      episodesData.forEach(episode => {
+        episodes.push({
+            href: `https://animeunity.so/anime/${idAnime}-${slug}/${episode.id}`,
+            number: episode.number
+        });
+    });
+  
+      return episodes;
 }
 
 async function extractStreamUrl(url) {
