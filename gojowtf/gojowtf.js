@@ -156,10 +156,10 @@ function cleanHtmlSymbols(string) {
         .replace(/&#8217;/g, "'")
         .replace(/&#8211;/g, "-")
         .replace(/&#[0-9]+;/g, "")
-        .replace(/\r?\n|\r/g, " ")  // Replace any type of newline with a space
-        .replace(/\s+/g, " ")       // Replace multiple spaces with a single space
+        .replace(/\r?\n|\r/g, " ")  
+        .replace(/\s+/g, " ")       
         .replace(/<i[^>]*>(.*?)<\/i>/g, "$1")
         .replace(/<b[^>]*>(.*?)<\/b>/g, "$1") 
         .replace(/<[^>]+>/g, "")
-        .trim();                    // Remove leading/trailing whitespace
+        .trim();                 
 }
