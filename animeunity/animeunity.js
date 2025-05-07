@@ -36,63 +36,87 @@ async function extractDetails(url) {
   ]);
 }
 
-
-function extractEpisodes(html) {
+async function extractEpisodes(url) {
+  try {
     const episodes = [];
+
+    const idMatch = url.match(/\/info_api\/(\d+)/);
+    if (!idMatch) {
+      console.log('Invalid info_api URL format');
+      return episodes;
+    }
+    const id = idMatch[1];
+
+    const apiResponse = await fetchv2(url);
+    const apiJson = JSON.parse(await apiResponse.text());
+    const slug = apiJson.slug;
+
+    if (!slug) {
+      console.log('No slug found in API response');
+      return episodes;
+    }
+
+    const pageResponse = await fetchv2(`https://www.animeunity.so/anime/${id}-${slug}`);
+    const html = await pageResponse.text();
+
     const videoPlayerRegex = /<video-player[^>]*anime="([^"]*)"[^>]*episodes="([^"]*)"/;
     const videoPlayerMatch = html.match(videoPlayerRegex);
-      if (!videoPlayerMatch) {
-        return episodes;
-    }
-  
-    const animeJson = videoPlayerMatch[1].replace(/&quot;/g, '"');
-    const animeData = JSON.parse(animeJson);
-  
-    const slug = animeData.slug;
-    const idAnime = animeData.id;
-    const episodesJson = videoPlayerMatch[2].replace(/&quot;/g, '"');
-    const episodesData = JSON.parse(episodesJson);
-  
-      episodesData.forEach(episode => {
-        episodes.push({
-            href: `https://animeunity.so/anime/${idAnime}-${slug}/${episode.id}`,
-            number: episode.number
-        });
-    });
-  
+    if (!videoPlayerMatch) {
+      console.log('No video-player tag found');
       return episodes;
+    }
+
+    const decodeHtml = str => str.replace(/&quot;/g, '"').replace(/\\\//g, '/');
+
+    const animeJsonStr = decodeHtml(videoPlayerMatch[1]);
+    const episodesJsonStr = decodeHtml(videoPlayerMatch[2]);
+
+    const animeData = JSON.parse(animeJsonStr);
+    const episodesData = JSON.parse(episodesJsonStr);
+
+    const idAnime = animeData.id;
+
+    episodesData.forEach(episode => {
+      episodes.push({
+        href: `https://animeunity.so/anime/${idAnime}-${slug}/${episode.id}`,
+        number: parseInt(episode.number)
+      });
+    });
+
+    return JSON.stringify(episodes);
+  } catch (error) {
+    console.log('Error extracting episodes:', error);
+    return [];
+  }
 }
 
 async function extractStreamUrl(url) {
-  const response = await fetchv2(url);
-  const html = await response.text();
+  try {
+    const response1 = await fetchv2(url);
+    const html = await response1.text();
+  
+      const vixcloudMatch = html.match(/embed_url="(https:\/\/vixcloud\.co\/embed\/\d+\?[^"]+)"/);
+      if (!vixcloudMatch) {
+          console.log('No vixcloud.co URL found in the HTML.');
+          return null;
+      }
 
-  const regex = /<video-player[^>]*embed_url="([^"]+)"/;
-  const match = regex.exec(html);
-  const embedUrl = match ? match[1].replaceAll(`&amp;`, "&") : "";
+      let vixcloudUrl = vixcloudMatch[1];
+      vixcloudUrl = vixcloudUrl.replace(/&amp;/g, '&');
 
-  if (embedUrl) {
-    const response = await fetchv2(embedUrl);
-    const html = await response.text();
+      const response = await fetch(vixcloudUrl);
+      const downloadUrlMatch = response.match(/window\.downloadUrl\s*=\s*['"]([^'"]+)['"]/);
+      
+      if (!downloadUrlMatch) {
+          console.log('No downloadUrl found in the response.');
+          return null;
+      }
 
-    const scriptRegex =
-      /<script[^>]*>([\s\S]*?window\.video[\s\S]*?)<\/script>/;
-    const scriptMatch = scriptRegex.exec(html);
-    const scriptContent = scriptMatch ? scriptMatch[1] : "";
-
-    const domain = /url: '([^']+)'/.exec(scriptContent)[1];
-    const token = /token': '([^']+)'/.exec(scriptContent)[1];
-    const expires = /expires': '([^']+)'/.exec(scriptContent)[1];
-
-    let streamUrl = new URL(domain);
-
-    streamUrl.searchParams.append("token", token);
-    streamUrl.searchParams.append("referer", "");
-    streamUrl.searchParams.append("expires", expires);
-    streamUrl.searchParams.append("h", "1");
-
-    return streamUrl.href;
+      const downloadURL = downloadUrlMatch[1];
+      console.log(downloadURL);
+      return downloadURL;
+  } catch (error) {
+      console.log('Fetch error:', error);
+      return null;
   }
-
-  return null;
 }
