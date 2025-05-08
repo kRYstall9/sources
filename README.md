@@ -1,3 +1,8 @@
+> [!WARNING]
+> <p xmlns:cc="http://creativecommons.org/ns" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/50n50/sources">Sora Modules</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/50n50">50n50</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International<br><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nd.svg?ref=chooser-v1" alt=""></a></p>
+> 
+> **DO NOT PAY TO USE THESE MODULES, IF AN APP OR WEBSITE IS MAKING YOU PAY THEY'RE SCAMMING YOU!**
+
 > [!CAUTION]
 > **ONLY USE THE BELOW MODULES**<br>
 > **IF A MODULE IN MY REPO ISN'T LISTED BELOW THEN IT'S NOT WORKING** <br>
@@ -999,7 +1004,7 @@
 <img src="https://i.ibb.co/BHKwFDdT/Its-2000-x-500-px.png" alt="" width="1020" height="200">
 
 
-
+<p xmlns:cc="http://creativecommons.org/ns" xmlns:dct="http://purl.org/dc/terms/"><a property="dct:title" rel="cc:attributionURL" href="https://github.com/50n50/sources">Sora Modules</a> by <a rel="cc:attributionURL dct:creator" property="cc:attributionName" href="https://github.com/50n50">50n50</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-nd/4.0/?ref=chooser-v1" target="_blank" rel="license noopener noreferrer" style="display:inline-block;">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International<img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/cc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/by.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nc.svg?ref=chooser-v1" alt=""><img style="height:22px!important;margin-left:3px;vertical-align:text-bottom;" src="https://mirrors.creativecommons.org/presskit/icons/nd.svg?ref=chooser-v1" alt=""></a></p>
  
 
 
