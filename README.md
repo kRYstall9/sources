@@ -990,9 +990,9 @@
 </details>
 
 <!--- GERMAN ======================================================================================================= END --->
-
-## If shit don't work no more tell me
-
+## 
+> [!NOTE]  
+> **If shit don't work no more tell me**  
 
 ### ❤️ Credits:
 - [AniWatch API](https://github.com/ghoshRitesh12/aniwatch-api) hosted by [bshar1865](https://github.com/bshar1865/)
