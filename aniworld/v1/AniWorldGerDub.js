@@ -18,7 +18,7 @@ async function searchResults(keyword) {
 
     return JSON.stringify(transformedResults);
   } catch (error) {
-    console.log("Fetch error:" + error);
+    sendLog("Fetch error:" + error);
     return JSON.stringify([{ title: "Error", image: "", href: "" }]);
   }
 }
@@ -52,7 +52,7 @@ async function extractDetails(url) {
 
     return JSON.stringify(transformedResults);
   } catch (error) {
-    console.log("Details error:" + error);
+    sendLog("Details error:" + error);
     return JSON.stringify([
       {
         description: "Error loading description",
@@ -86,7 +86,7 @@ async function extractEpisodes(url) {
 
     return JSON.stringify(finishedList);
   } catch (error) {
-    console.log("Fetch error:" + error);
+    sendLog("Fetch error:" + error);
     return JSON.stringify([{ number: "0", href: "" }]);
   }
 }
@@ -119,14 +119,14 @@ async function extractStreamUrl(url) {
     const provider = selectedHoster.provider;
     const providerLink = selectedHoster.href;
     if (provider === "Error") {
-      console.log("No video found");
+      sendLog("No video found");
       return JSON.stringify([{ provider: "Error", link: "" }]);
     }
-    console.log("Selected provider: " + provider);
-    console.log("Selected link: " + providerLink);
+    sendLog("Selected provider: " + provider);
+    sendLog("Selected link: " + providerLink);
 
     const videoPage = await fetch(providerLink);
-    console.log("Video Page: " + videoPage.length);
+    sendLog("Video Page: " + videoPage.length);
 
     const winLocRegex = /window\.location\.href\s*=\s*['"]([^'"]+)['"]/;
     const winLocMatch = winLocRegex.exec(videoPage);
@@ -142,9 +142,9 @@ async function extractStreamUrl(url) {
       typeof hlsSourceResponse === "object"
         ? await hlsSourceResponse.text()
         : await hlsSourceResponse;
-    console.log("Provider: " + provider);
-    console.log("URL: " + winLocUrl);
-    console.log("HLS Source Page: " + hlsSourcePage.length);
+    sendLog("Provider: " + provider);
+    sendLog("URL: " + winLocUrl);
+    sendLog("HLS Source Page: " + hlsSourcePage.length);
     
     switch (provider) {
       case "VOE":
@@ -152,7 +152,7 @@ async function extractStreamUrl(url) {
         const voeJson = voeExtractor(hlsSourcePage);
         return voeJson?.source || JSON.stringify([{ provider: "Error", link: "" }]);
       } catch (error) {
-        console.log("VOE extractor error: " + error);
+        sendLog("VOE extractor error: " + error);
         return JSON.stringify([{ provider: "Error", link: "" }]);
       }
 
@@ -161,7 +161,7 @@ async function extractStreamUrl(url) {
         const speedfilesUrl = await speedfilesExtractor(hlsSourcePage);
         return speedfilesUrl || JSON.stringify([{ provider: "Error", link: "" }]);
       } catch (error) {
-        console.log("Speedfiles extractor error: " + error);
+        sendLog("Speedfiles extractor error: " + error);
         return JSON.stringify([{ provider: "Error", link: "" }]);
       }
 
@@ -170,12 +170,12 @@ async function extractStreamUrl(url) {
         const vidmolyUrl = vidmolyExtractor(hlsSourcePage);
         return vidmolyUrl || JSON.stringify([{ provider: "Error", link: "" }]);
       } catch (error) {
-        console.log("Vidmoly extractor error: " + error);
+        sendLog("Vidmoly extractor error: " + error);
         return JSON.stringify([{ provider: "Error", link: "" }]);
       }
 
       default:
-      console.log("Unsupported provider:", provider);
+      sendLog("Unsupported provider:", provider);
       return JSON.stringify([{ provider: "Error", link: "" }]);
     }
     // END OF VOE EXTRACTOR
@@ -189,7 +189,7 @@ async function extractStreamUrl(url) {
 
     return sourcesString;
   } catch (error) {
-    console.log("ExtractStreamUrl error:" + error);
+    sendLog("ExtractStreamUrl error:" + error);
     return JSON.stringify([{ provider: "Error1", link: "" }]);
   }
 }
@@ -228,7 +228,7 @@ function selectHoster(finishedList) {
         href: firstVideo.href,
       };
     } else {
-      console.log("No video found");
+      sendLog("No video found");
       return {
         provider: "Error",
         href: "https://error.org",
@@ -238,8 +238,8 @@ function selectHoster(finishedList) {
 
 //Thanks to Ibro and Cufiy
 async function vidmolyExtractor(html) {
-  console.log("Vidmoly extractor");
-  console.log(html);
+  sendLog("Vidmoly extractor");
+  sendLog(html);
     const regexSub = /<option value="([^"]+)"[^>]*>\s*SUB - Omega\s*<\/option>/;
     const regexFallback = /<option value="([^"]+)"[^>]*>\s*Omega\s*<\/option>/;
     const fallback = /<option value="([^"]+)"[^>]*>\s*SUB v2 - Omega\s*<\/option>/;
@@ -247,26 +247,26 @@ async function vidmolyExtractor(html) {
 
     let match = html.match(regexSub) || html.match(regexFallback) || html.match(fallback);
   if (match) {
-    console.log("Vidmoly extractor: Match found");
+    sendLog("Vidmoly extractor: Match found");
     const decodedHtml = atob(match[1]); // Decode base64
     const iframeMatch = decodedHtml.match(/<iframe\s+src="([^"]+)"/);
 
     if (!iframeMatch) {
-        console.log("Vidmoly extractor: No iframe match found");
+        sendLog("Vidmoly extractor: No iframe match found");
         return null;
     }
 
     const streamUrl = iframeMatch[1].startsWith("//") ? "https:" + iframeMatch[1] : iframeMatch[1];
-    console.log("Vidmoly extractor: Stream URL: " + streamUrl);
+    sendLog("Vidmoly extractor: Stream URL: " + streamUrl);
 
     const responseTwo = await fetchv2(streamUrl);
     const htmlTwo = await responseTwo.text();
 
     const m3u8Match = htmlTwo.match(/sources:\s*\[\{file:"([^"]+\.m3u8)"/);
-    console.log(m3u8Match ? m3u8Match[1] : null);
+    sendLog(m3u8Match ? m3u8Match[1] : null);
     return m3u8Match ? m3u8Match[1] : null;
   } else {
-    console.log("Vidmoly extractor: No match found, using fallback");
+    sendLog("Vidmoly extractor: No match found, using fallback");
   //  regex the sources: [{file:"this_is_the_link"}]
     const sourcesRegex = /sources:\s*\[\{file:"(https?:\/\/[^"]+)"\}/;
     const sourcesMatch = html.match(sourcesRegex);
@@ -285,16 +285,16 @@ function speedfilesExtractor(sourcePageHtml) {
   const REGEX = /var\s+_0x5opu234\s*=\s*"([^"]+)"/;
   const match = sourcePageHtml.match(REGEX);
   if (match == null || match[1] == null) {
-    console.log("Could not extract from Speedfiles source");
+    sendLog("Could not extract from Speedfiles source");
     return null;
   }
 
   const encodedString = match[1];
-  console.log("Encoded String:" + encodedString);
+  sendLog("Encoded String:" + encodedString);
 
   // Step 1: Base64 decode the initial string
   let step1 = atob(encodedString);
-  console.log("Step 1:" + step1);
+  sendLog("Step 1:" + step1);
 
   // Step 2: Swap character cases and reverse
   let step2 = step1
@@ -307,29 +307,29 @@ function speedfilesExtractor(sourcePageHtml) {
         : c
     )
     .join("");
-  console.log("Step 2:" + step2);
+  sendLog("Step 2:" + step2);
   let step3 = step2.split("").reverse().join("");
-  console.log("Step 3:" + step3);
+  sendLog("Step 3:" + step3);
 
   // Step 3: Base64 decode again and reverse
   let step4 = atob(step3);
-  console.log("Step 4:" + step4);
+  sendLog("Step 4:" + step4);
   let step5 = step4.split("").reverse().join("");
-  console.log("Step 5:" + step5);
+  sendLog("Step 5:" + step5);
 
   // Step 4: Hex decode pairs
   let step6 = "";
   for (let i = 0; i < step5.length; i += 2) {
     step6 += String.fromCharCode(parseInt(step5.substr(i, 2), 16));
   }
-  console.log("Step 6:" + step6);
+  sendLog("Step 6:" + step6);
 
   // Step 5: Subtract 3 from character codes
   let step7 = step6
     .split("")
     .map((c) => String.fromCharCode(c.charCodeAt(0) - 3))
     .join("");
-  console.log("Step 7:" + step7);
+  sendLog("Step 7:" + step7);
 
   // Step 6: Final case swap, reverse, and Base64 decode
   let step8 = step7
@@ -342,139 +342,124 @@ function speedfilesExtractor(sourcePageHtml) {
         : c
     )
     .join("");
-  console.log("Step 8:" + step8);
+  sendLog("Step 8:" + step8);
   let step9 = step8.split("").reverse().join("");
-  console.log("Step 9:" + step9);
+  sendLog("Step 9:" + step9);
 
   // return atob(step9);
   let decodedUrl = atob(step9);
-  console.log("Decoded URL:" + decodedUrl);
+  sendLog("Decoded URL:" + decodedUrl);
   return decodedUrl;
 }
 
-// Thanks to https://github.com/ShadeOfChaos
+
 
 /**
- * Extracts a JSON object from the given source page by finding the
- * encoded string marked with the regex /MKGMa="([\s\S]+?)"/ and
- * decoding it using the voeDecoder function.
- * @param {string} sourcePageHtml - The source page to be parsed.
- * @returns {object|null} The extracted JSON object if successful,
- *   otherwise null.
+ * @name voeExtractor
+ * @author Cufiy
  */
-function voeExtractor(sourcePageHtml) {
-  const REGEX = /MKGMa="([\s\S]+?)"/;
 
-  const match = sourcePageHtml.match(REGEX);
-  if (match == null || match[1] == null) {
-    console.log("Could not extract from Voe source");
-    return null;
-  }
-
-  const encodedString = match[1];
-  const decodedJson = voeDecoder(encodedString);
-
-  return decodedJson;
-}
-
-/**
- * Decodes the given MKGMa string, which is a custom encoded string used
- * by VOE. This function applies the following steps to the input string to
- * decode it:
- * 1. Apply ROT13 to each alphabetical character in the string.
- * 2. Remove all underscores from the string.
- * 3. Decode the string using the Base64 algorithm.
- * 4. Apply a character shift of 0x3 to each character in the decoded string.
- * 5. Reverse the order of the characters in the shifted string.
- * 6. Decode the reversed string using the Base64 algorithm again.
- * 7. Parse the decoded string as JSON.
- * @param {string} MKGMa_String - The input string to be decoded.
- * @returns {object} The decoded JSON object.
- */
-function voeDecoder(MKGMa_String) {
-  let ROT13String = ROT13(MKGMa_String);
-  let sanitizedString = voeSanitizer(ROT13String);
-  let UnderscoreRemoved = sanitizedString.split("_").join("");
-  let base64DecodedString = atob(UnderscoreRemoved);
-  let charShiftedString = shiftCharacter(base64DecodedString, 0x3);
-  let reversedString = charShiftedString.split("").reverse().join("");
-  let base64DecodedStringAgain = atob(reversedString);
-  let decodedJson;
-  try {
-    decodedJson = JSON.parse(base64DecodedStringAgain);
-  } catch (error) {
-    console.log("JSON parse error:", error);
-    decodedJson = {};
-  }
-  return decodedJson;
-}
-
-/**
- * Encodes a given string using the ROT13 cipher, which shifts each letter
- * 13 places forward in the alphabet. Only alphabetical characters are
- * transformed; other characters remain unchanged.
- *
- * @param {string} string - The input string to be encoded.
- * @returns {string} The encoded string with ROT13 applied.
- */
-function ROT13(string) {
-  let ROT13String = "";
-
-  for (let i = 0; i < string.length; i++) {
-    let currentCharCode = string.charCodeAt(i);
-
-    // Check for uppercase
-    if (currentCharCode >= 65 && currentCharCode <= 90) {
-      currentCharCode = ((currentCharCode - 65 + 13) % 26) + 65;
-      // Check for lowercase
-    } else if (currentCharCode >= 97 && currentCharCode <= 122) {
-      currentCharCode = ((currentCharCode - 97 + 13) % 26) + 97;
+function voeExtractor(html, url = null) {
+// Extract the first <script type="application/json">...</script>
+    const jsonScriptMatch = html.match(
+      /<script[^>]+type=["']application\/json["'][^>]*>([\s\S]*?)<\/script>/i
+    );
+    if (!jsonScriptMatch) {
+      sendLog("No application/json script tag found");
+      return null;
     }
 
-    ROT13String += String.fromCharCode(currentCharCode);
-  }
 
-  return ROT13String;
+    const obfuscatedJson = jsonScriptMatch[1].trim();
+
+  let data;
+  try {
+    data = JSON.parse(obfuscatedJson);
+  } catch (e) {
+    throw new Error("Invalid JSON input.");
+  }
+  if (!Array.isArray(data) || typeof data[0] !== "string") {
+    throw new Error("Input doesn't match expected format.");
+  }
+  let obfuscatedString = data[0];
+
+  // Step 1: ROT13
+  let step1 = voeRot13(obfuscatedString);
+
+  // Step 2: Remove patterns
+  let step2 = voeRemovePatterns(step1);
+
+  // Step 3: Base64 decode
+  let step3 = voeBase64Decode(step2);
+
+  // Step 4: Subtract 3 from each char code
+  let step4 = voeShiftChars(step3, 3);
+
+  // Step 5: Reverse string
+  let step5 = step4.split("").reverse().join("");
+
+  // Step 6: Base64 decode again
+  let step6 = voeBase64Decode(step5);
+
+  // Step 7: Parse as JSON
+  let result;
+  try {
+    result = JSON.parse(step6);
+  } catch (e) {
+    throw new Error("Final JSON parse error: " + e.message);
+  }
+  sendLog("Decoded JSON:", result);
+
+  // check if direct_access_url is set, not null and starts with http
+  if (result && typeof result === "object") {
+    const streamUrl =
+      result.direct_access_url ||
+      result.source
+        .map((source) => source.direct_access_url)
+        .find((url) => url && url.startsWith("http"));
+    if (streamUrl) {
+      sendLog("Voe Stream URL: " + streamUrl);
+      return streamUrl;
+    } else {
+      sendLog("No stream URL found in the decoded JSON");
+    }
+  }
+  return result;
 }
 
-/**
- * Sanitizes a given string by replacing all occurrences of certain "trash" strings
- * with an underscore. The trash strings are '@$', '^^', '~@', '%?', '*~', '!!', '#&'.
- * This is used to decode VOE encoded strings.
- * @param {string} string The string to be sanitized.
- * @returns {string} The sanitized string.
- */
-function voeSanitizer(string) {
-  let sanitizationArray = ["@$", "^^", "~@", "%?", "*~", "!!", "#&"];
-  let tempString = string;
-
-  for (let i = 0; i < sanitizationArray.length; i++) {
-    let currentTrash = sanitizationArray[i];
-    let sanitizedString = new RegExp(
-      currentTrash.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
-      "g"
+function voeRot13(str) {
+  return str.replace(/[a-zA-Z]/g, function (c) {
+    return String.fromCharCode(
+      (c <= "Z" ? 90 : 122) >= (c = c.charCodeAt(0) + 13)
+        ? c
+        : c - 26
     );
-
-    tempString = tempString.replace(sanitizedString, "_");
-  }
-
-  return tempString;
+  });
 }
 
-/**
- * Shifts the characters in a string by a given number of places.
- * @param {string} string - The string to shift.
- * @param {number} shiftNum - The number of places to shift the string.
- * @returns {string} The shifted string.
- */
-function shiftCharacter(string, shiftNum) {
-  let tempArray = [];
-
-  for (let i = 0; i < string.length; i++) {
-    tempArray.push(String.fromCharCode(string.charCodeAt(i) - shiftNum));
+function voeRemovePatterns(str) {
+  const patterns = ["@$", "^^", "~@", "%?", "*~", "!!", "#&"];
+  let result = str;
+  for (const pat of patterns) {
+    result = result.split(pat).join("");
   }
+  return result;
+}
 
-  return tempArray.join("");
+function voeBase64Decode(str) {
+  // atob is available in browsers and Node >= 16
+  if (typeof atob === "function") {
+    return atob(str);
+  }
+  // Node.js fallback
+  return Buffer.from(str, "base64").toString("utf-8");
+}
+
+function voeShiftChars(str, shift) {
+  return str
+    .split("")
+    .map((c) => String.fromCharCode(c.charCodeAt(0) - shift))
+    .join("");
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -530,7 +515,7 @@ async function fetchSeasonEpisodes(url) {
 
     return matches;
   } catch (error) {
-    console.log("FetchSeasonEpisodes helper function error:" + error);
+    sendLog("FetchSeasonEpisodes helper function error:" + error);
     return [{ number: "0", href: "https://error.org" }];
   }
 }
@@ -600,12 +585,12 @@ function base64Decode(str) {
 }
 
 // Debugging function to send logs
-// async function sendLog(message) {
-//     // send http://192.168.2.130/sora-module/log.php?action=add&message=message
-//     console.log(message);
+async function sendLog(message) {
+    // send http://192.168.2.130/sora-module/log.php?action=add&message=message
+    console.log(message);
 
-//     await fetch('http://192.168.2.130/sora-module/log.php?action=add&message=' + encodeURIComponent(message))
-//     .catch(error => {
-//         console.error('Error sending log:', error);
-//     });
-// }
+    await fetch('http://192.168.2.130/sora-module/log.php?action=add&message=' + encodeURIComponent(message))
+    .catch(error => {
+        console.error('Error sending log:', error);
+    });
+}
