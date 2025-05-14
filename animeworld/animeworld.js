@@ -1,6 +1,6 @@
 function searchResults(html) {
     const results = [];
-    const baseUrl = "https://animeworld.so";
+    const baseUrl = "https://animeworld.ac";
     
     const filmListRegex = /<div class="film-list">([\s\S]*?)<div class="clearfix"><\/div>\s*<\/div>/;
     const filmListMatch = html.match(filmListRegex);
@@ -73,7 +73,7 @@ function extractDetails(html) {
 
 function extractEpisodes(html) {
     const episodes = [];
-    const baseUrl = "https://animeworld.so";
+    const baseUrl = "https://animeworld.ac";
     
     const serverActiveRegex = /<div class="server active"[^>]*>([\s\S]*?)<\/ul>\s*<\/div>/;
     const serverActiveMatch = html.match(serverActiveRegex);
@@ -112,3 +112,4 @@ function extractStreamUrl(html) {
     const match = html.match(idRegex);
     return match ? match[1] : null;
 }
+
