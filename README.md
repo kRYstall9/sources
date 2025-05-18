@@ -1,5 +1,8 @@
 > [!WARNING] 
-> These modules are licensed **exclusively for use within the [Sora/Sulfur iOS app](https://github.com/cranci1/Sora)**.  
+> These modules are licensed **exclusively for use within the [Sora/Sulfur iOS app](https://github.com/cranci1/Sora)**.
+> 
+> **DO NOT USE IN THIRD PARTY APPS, THIS IS MOST LIKELY MALWARE!**
+> 
 > **Do not pay to use them — if someone is charging you, it's a scam.**  
 
 
