@@ -1,3 +1,8 @@
+> [!WARNING] 
+> These modules are licensed **exclusively for use within the [Sora/Sulfur iOS app](https://github.com/cranci1/Sora)**.  
+> **Do not pay to use them — if someone is charging you, it's a scam.**  
+
+
 > [!CAUTION]
 > **ONLY USE THE BELOW MODULES**<br>
 > **IF A MODULE IN MY REPO ISN'T LISTED BELOW THEN IT'S NOT WORKING** <br>
@@ -985,9 +990,9 @@
 </details>
 
 <!--- GERMAN ======================================================================================================= END --->
-
-## If shit don't work no more tell me
-
+## 
+> [!NOTE]  
+> **If shit don't work no more tell me**  
 
 ### ❤️ Credits:
 - [AniWatch API](https://github.com/ghoshRitesh12/aniwatch-api) hosted by [bshar1865](https://github.com/bshar1865/)
