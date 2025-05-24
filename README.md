@@ -914,6 +914,21 @@
 **Author:** sobet <br><br>
 [<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/animeworld/animeworld.json)
 </details>
+<details>
+
+<summary>
+  
+### 3️⃣ StreamingUnity 
+
+</summary>
+
+**File:** `StreamingUnity.json`  
+**Description:** StreamingUnity JavaScript module with direct HTML scraping (requires `StreamingUnity.js`). <br> 
+**Language:** Italian. <br>
+**App version:** V2 and up <br>
+**Author:** sobet <br><br>
+[<kbd> <br> Add to Sora <br> </kbd>](https://intradeus.github.io/http-protocol-redirector?r=sora://module?url=https://raw.githubusercontent.com/50n50/sources/refs/heads/main/streamingunity/streamingunity.json)
+</details>
 </details>
 <!--- ITALIAN ======================================================================================================= END --->
 
